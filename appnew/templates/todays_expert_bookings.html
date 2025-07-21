@@ -1,0 +1,152 @@
+{% extends "expertheader.html" %}
+{% block content %}
+<style>
+.todays-bookings-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    padding: 36px 28px 28px 28px;
+}
+h2 {
+    color: #007bff;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+}
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.todays-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+.todays-table th, .todays-table td {
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 1rem;
+    background: #f8f9fa;
+}
+.todays-table th {
+    background: #007bff;
+    color: #fff;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    border-radius: 8px 8px 0 0;
+}
+.todays-table tr {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.todays-table tr:hover {
+    background: #e3f0ff;
+}
+.no-data {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    margin: 30px 0 0 0;
+    font-size: 1.1rem;
+}
+.btn-video-call {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #28a745;
+    color: #fff !important;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(40,167,69,0.08);
+}
+.btn-video-call:hover {
+    background: #218838;
+    transform: scale(1.05);
+}
+.btn-video-call .icon {
+    margin-right: 8px;
+    vertical-align: middle;
+    font-size: 1.1em;
+}
+@media (max-width: 700px) {
+    .todays-bookings-container { padding: 16px 4px; }
+    .todays-table th, .todays-table td { padding: 10px 4px; font-size: 0.95rem; }
+    h2 { font-size: 1.3rem; }
+}
+.view-all-link {
+    display: block;
+    text-align: right;
+    margin-bottom: 18px;
+}
+.view-all-link a {
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.view-all-link a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+</style>
+
+<div class="todays-bookings-container">
+    <h2>Today's Bookings ({{ today }})</h2>
+    
+    <div class="table-responsive">
+    {% if bookings %}
+        <table class="todays-table">
+            <tr>
+                <th>User</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <!-- <th>Status</th> -->
+                <th>Video Call</th>
+            </tr>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.user.name }}</td>
+                <td>{{ booking.slot.start_time|time:"H:i" }}</td>
+                <td>{{ booking.slot.end_time|time:"H:i" }}</td>
+                <!-- <td>
+                    {% if booking.slot.is_booked %}
+                        <span style="color: #28a745; font-weight: 600;">Booked</span>
+                    {% else %}
+                        <span style="color: #888;">Available</span>
+                    {% endif %}
+                </td> -->
+                <td>
+            
+         {% if booking.slot.start_time <= now_time and now_time <= booking.slot.end_time %}
+
+              <a href="{% url 'video_call' booking.id %}" class="btn-video-call">
+              <span class="icon"><i class="fa-solid fa-video"></i></span> Video Call
+              </a>
+            {% else %}
+              <span class="btn-call" title="Video call is only active during your scheduled slot">
+  <span class="icon"><i class="fa-solid fa-video-slash"></i></span> Video Call
+</span>
+            {% endif %}
+                   
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="no-data">No bookings scheduled for today.</div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

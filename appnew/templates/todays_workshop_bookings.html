@@ -1,0 +1,93 @@
+{% extends "workshopheader.html" %}
+{% block content %}
+<style>
+.todays-bookings-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    padding: 36px 28px 28px 28px;
+}
+h2 {
+    color: #b91c1c;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+}
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.todays-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+.todays-table th, .todays-table td {
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 1rem;
+    background: #f8f9fa;
+}
+.todays-table th {
+    background: #b91c1c;
+    color: #fff;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    border-radius: 8px 8px 0 0;
+}
+.todays-table tr {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.todays-table tr:hover {
+    background: #ffeaea;
+}
+.no-data {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    margin: 30px 0 0 0;
+    font-size: 1.1rem;
+}
+@media (max-width: 700px) {
+    .todays-bookings-container { padding: 16px 4px; }
+    .todays-table th, .todays-table td { padding: 10px 4px; font-size: 0.95rem; }
+    h2 { font-size: 1.3rem; }
+}
+</style>
+
+<div class="todays-bookings-container">
+    <h2>Today's Workshop Bookings ({{ today }})</h2>
+    <div class="table-responsive">
+    {% if bookings %}
+        <table class="todays-table">
+            <tr>
+                <th>User</th>
+                <th>Time</th>
+                <th>Issue</th>
+                <th>Status</th>
+            </tr>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.userid.name }}</td>
+                <td>{{ booking.slot.time|time:"H:i" }}</td>
+                <td>{{ booking.issue }}</td>
+                <td>{{ booking.status|capfirst }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="no-data">No bookings scheduled for today.</div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

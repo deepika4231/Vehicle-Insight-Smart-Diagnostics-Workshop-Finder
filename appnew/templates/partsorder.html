@@ -1,0 +1,400 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #eef2f7, #ffffff);
+      color: #333;
+    }
+
+    h3 {
+      text-align: center;
+      margin: 30px 0 15px;
+      font-size: 2.2rem;
+      color: #2a2a72;
+    }
+
+    form {
+      text-align: center;
+      margin: 20px;
+    }
+
+    table {
+      width: 95%;
+      max-width: 1200px;
+      margin: 30px auto;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+    }
+
+    thead th {
+      background-color: #2a2a72;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      border-radius: 5px 5px 0 0;
+    }
+
+    tbody td {
+      background: #fff;
+      padding: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #ddd;
+      border-top: 1px solid #ddd;
+    }
+
+    tbody tr:hover td {
+      background-color: #f7faff;
+      transition: background-color 0.3s ease;
+    }
+
+    img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .action-links a {
+      background-color: #e74c3c;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+
+    .action-links a:hover {
+      background-color: #c0392b;
+    }
+
+    .status {
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .status.pending {
+      background-color: #fce4e4;
+      color: #e74c3c;
+    }
+
+    .status.purchased a {
+      background-color: #e8f5e9;
+      color: #27ae60;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .status.purchased a:hover {
+      text-decoration: underline;
+    }
+
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #888;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .button-link {
+      display: block;
+      width: fit-content;
+      margin: 40px auto;
+      background-color: #2a2a72;
+      color: white;
+      padding: 12px 28px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .button-link:hover {
+      background-color: #1d1d5b;
+    }
+
+    @media (max-width: 768px) {
+      h3 {
+        font-size: 1.9rem;
+      }
+
+      table, thead, tbody, th, td, tr {
+        font-size: 0.9rem;
+      }
+
+      img {
+        width: 70px;
+        height: 70px;
+      }
+
+      .action-links a {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h3 {
+        font-size: 1.6rem;
+      }
+
+      .button-link {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body> -->
+  {% extends 'adminheader.html' %}
+
+  {% block content %}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #eef2f7, #ffffff);
+      color: #333;
+    }
+
+    h3 {
+      text-align: center;
+      margin: 30px 0 15px;
+      font-size: 2.2rem;
+      color: #2a2a72;
+    }
+
+    form {
+      text-align: center;
+      margin: 20px;
+    }
+
+    table {
+      width: 95%;
+      max-width: 1200px;
+      margin: 30px auto;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+    }
+
+    thead th {
+      background-color: #2a2a72;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      border-radius: 5px 5px 0 0;
+    }
+
+    tbody td {
+      background: #fff;
+      padding: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #ddd;
+      border-top: 1px solid #ddd;
+    }
+
+    tbody tr:hover td {
+      background-color: #f7faff;
+      transition: background-color 0.3s ease;
+    }
+
+    img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .action-links a {
+      background-color: #e74c3c;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+
+    .action-links a:hover {
+      background-color: #c0392b;
+    }
+
+    .status {
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .status.pending {
+      background-color: #fce4e4;
+      color: #e74c3c;
+    }
+
+    .status.purchased a {
+      background-color: #e8f5e9;
+      color: #27ae60;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .status.purchased a:hover {
+      text-decoration: underline;
+    }
+
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #888;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .button-link {
+      display: block;
+      width: fit-content;
+      margin: 40px auto;
+      background-color: #2a2a72;
+      color: white;
+      padding: 12px 28px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .button-link:hover {
+      background-color: #1d1d5b;
+    }
+
+    @media (max-width: 768px) {
+      h3 {
+        font-size: 1.9rem;
+      }
+
+      table, thead, tbody, th, td, tr {
+        font-size: 0.9rem;
+      }
+
+      img {
+        width: 70px;
+        height: 70px;
+      }
+
+      .action-links a {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h3 {
+        font-size: 1.6rem;
+      }
+
+      .button-link {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+
+  <h3>Order Details</h3>
+
+  <!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+  </form> -->
+
+  <table>
+    <thead>
+      <tr>
+        <th>Part Name</th>
+        <th>Part Number</th>
+        <th>Company</th>
+        <th>Vehicle Model</th>
+        <th>unit Price</th>
+        <th>Year</th>
+        <th>Image</th>
+        <th>Action</th>
+        <th>Refund pay</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+        <tr>
+          <td>{{ item.part_id.part_name }}</td>
+          <td>{{ item.part_id.part_number }}</td>
+          <td>{{ item.part_id.company }}</td>
+          <td>{{ item.part_id.vehicle_model }}</td>
+          <td>{{ item.part_id.part_price }}</td>
+          <td>{{ item.part_id.part_year }}</td>
+          <td>
+            <img src="{{ item.part_id.part_image.url }}" alt="Part Image">
+          </td>
+          <td class="action-links">
+           
+            {% if item.payment_status == '1' and item.cancel_status == '0' %}
+              <span style="color: green;"><a href="{% url 'payment_receipt' item.id %}">Purchased</a></span>
+            {% else %}
+              <span style="color: red;">Cancelled</span>
+            {% endif %}
+          </td>
+          <td class="action-links">
+            {% if item.cancel_status == '1' and item.refund_status == '0' %}
+              <span style="color: green;"><a href="refundpayment/{{ item.id }}">Refund</a></span>
+           
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="8" class="no-data">No parts found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  
+<!-- 
+</body>
+</html> -->
+{% endblock %}

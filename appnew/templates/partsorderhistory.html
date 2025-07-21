@@ -1,0 +1,200 @@
+{% extends 'adminheader.html' %}
+
+{% block content %}
+
+{% load static %}
+<style>
+  .container { max-width: 1200px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 30px; }
+  h2 { text-align: center; color: #007bff; margin-bottom: 25px; width: 100%; }
+  .details-section { margin-top: 30px; }
+  .selected { background: #d0e9ff !important; }
+  .flex-row { display: flex; gap: 30px; flex-wrap: wrap; }
+  .flex-main { flex: 2; min-width: 0; }
+  .flex-details { flex: 1; min-width: 260px; max-width: 350px; }
+  .details-section { background: #f8f9fa; border-radius: 8px; padding: 18px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); word-break: break-word; }
+  .booking-info strong { display: inline-block; min-width: 120px; }
+  table { width: 100%; border-collapse: collapse; font-size: 1.08rem; }
+  th, td { padding: 16px 10px; border-bottom: 1px solid #e0e0e0; text-align: center; cursor: pointer; }
+  th { background: #007bff; color: #fff; font-size: 1.1rem; }
+  tr:nth-child(even) { background: #f9f9f9; }
+  .table-wrapper { max-height: 420px; overflow-y: auto; }
+  @media (max-width: 900px) {
+    .flex-row { flex-direction: column; }
+    .flex-main, .flex-details { min-width: 0; max-width: 100%; }
+    table { font-size: 0.98rem; }
+    th, td { padding: 10px 4px; }
+    .details-section { margin-top: 30px; }
+    .table-wrapper { max-height: 350px; }
+  }
+  @media (max-width: 600px) {
+    .container { padding: 5px; }
+    table { font-size: 0.90rem; }
+    th, td { padding: 5px 2px; }
+    .details-section { padding: 10px 5px; }
+    .table-wrapper { max-height: 250px; }
+  }
+</style>
+
+
+    <h2>
+      <span style="font-size:2.1rem; letter-spacing:1px;">
+      <span style="display:inline-block; vertical-align:middle; margin-right:10px;">
+        <!-- SVG logo for order history -->
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;">
+        <circle cx="12" cy="12" r="10" stroke="#007bff" stroke-width="2" fill="#e9f3ff"/>
+        <path d="M12 7v5l4 2" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      All Parts Orders
+      <span style="font-size:1.1rem; color:#555; font-weight:400; margin-left:8px;">
+          (Active <span style="color:#0ce73f;">&#9679;</span> &amp; Cancelled <span style="color:#dc3545;">&#10006;</span>)
+        </span>
+      </span>
+    </h2>
+    <div class="flex-row">
+      <div class="flex-main">
+        <div class="table-wrapper">
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Order ID</th>
+                    <th>Part Name</th>
+                    <th>User</th>
+                    <th>Quantity</th>
+                    <th>Order Date</th>
+                    <th>Refund Status</th>
+                    <th>Cancel Status</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            {% for order in items %}
+<tr data-order-id="{{ order.id }}"
+    data-part-name="{{ order.part_id.part_name }}"
+    data-user="{{ order.order_user.name }}"
+    data-quantity="{{ order.order_quantity }}"
+    data-order-date="{{ order.order_date }}"
+    data-refund-status="{{ order.refund_status }}"
+    data-cancel-status="{{ order.cancel_status }}"
+    data-payment-status="{{ order.payment_status }}"
+    {% for pay in paymentdones %}
+        {% if pay.orderid.id == order.id %}
+        
+            data-card-number="**** **** **** {{ pay.cardno|slice:"-4:" }}"
+            data-card-name="{{ pay.name }}"
+            data-amount="{{ pay.amount }}"
+        {% endif %}
+    {% endfor %}
+    {% for ref in refundones %}
+        {% if ref.orderid.id == order.id %}
+       
+            data-refund-card-number="**** **** **** {{ ref.cardno|slice:"-4:" }}"
+            data-refund-card-name="{{ ref.name }}"
+            data-refund-amount="{{ ref.refund_amount }}"
+        {% endif %}
+    {% endfor %}
+>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ order.id }}</td>
+    <td>{{ order.part_id.part_name }}</td>
+    <td>{{ order.order_user.name }}</td>
+    <td>{{ order.order_quantity }}</td>
+    <td>{{ order.order_date }}</td>
+    <td>
+        {% if order.refund_status == '1' %}
+            <span class="badge badge-danger">Refunded</span>
+        {% else %}
+            <span class="badge badge-success">No Refund</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if order.cancel_status == '1' %}
+            <span class="badge badge-danger">Cancelled</span>
+        {% else %}
+            <span class="badge badge-success">Active</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if order.payment_status == '1' %}
+            <span class="badge badge-success">Paid</span>
+        {% else %}
+            <span class="badge badge-warning">Pending</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
+
+            </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="flex-details">
+        <div class="details-section" id="orderDetails">
+          <p class="no-details-text">Select an order row to see payment, cancel, and refund details here.</p>
+        </div>
+      </div>
+    </div>
+
+
+<script>
+  const ordersTable = document.getElementById('ordersTable');
+  const orderDetails = document.getElementById('orderDetails');
+
+  if (ordersTable) {
+    ordersTable.querySelectorAll('tbody tr').forEach(row => {
+      row.addEventListener('click', () => {
+        ordersTable.querySelectorAll('tbody tr').forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+
+        const partName = row.getAttribute('data-part-name');
+        const user = row.getAttribute('data-user');
+        const quantity = row.getAttribute('data-quantity');
+        const orderDate = row.getAttribute('data-order-date');
+        const refundStatus = row.getAttribute('data-refund-status');
+        const cancelStatus = row.getAttribute('data-cancel-status');
+        const paymentStatus = row.getAttribute('data-payment-status');
+        const cardNumber = row.getAttribute('data-card-number');
+        const cardName = row.getAttribute('data-card-name');
+        const amount = row.getAttribute('data-amount');
+        const refundCardNumber = row.getAttribute('data-refund-card-number');
+        const refundCardName = row.getAttribute('data-refund-card-name');
+        const refundAmount = row.getAttribute('data-refund-amount');
+
+        let paymentDetails = `
+          <div class="booking-info">
+            <strong>Card Number:</strong> ${cardNumber || '-'}<br>
+            <strong>Card Name:</strong> ${cardName || '-'}<br>
+            <strong>Amount:</strong> ${amount || '-'}<br>
+          </div>
+        `;
+
+        let refundDetails = '';
+        if (refundStatus === '1') {
+          refundDetails = `
+            <div class="booking-info" style="margin-top:10px;">
+              <strong>Refund Card Number:</strong> ${refundCardNumber || '-'}<br>
+              <strong>Refund Card Name:</strong> ${refundCardName || '-'}<br>
+              <strong>Refund Amount:</strong> ${refundAmount || '-'}<br>
+            </div>
+          `;
+        }
+
+        orderDetails.innerHTML = `
+          <div class="booking-info">
+            <strong>Part Name:</strong> ${partName}<br>
+            <strong>User:</strong> ${user}<br>
+            <strong>Quantity:</strong> ${quantity}<br>
+            <strong>Order Date:</strong> ${orderDate}<br>
+            <strong>Refund Status:</strong> ${refundStatus === '1' ? '<span style="color:red;">Refunded</span>' : '<span style="color:green;">No Refund</span>'}<br>
+            <strong>Cancel Status:</strong> ${cancelStatus === '1' ? '<span style="color:red;">Cancelled</span>' : '<span style="color:green;">Active</span>'}<br>
+            <strong>Payment Status:</strong> ${paymentStatus === '1' ? '<span style="color:green;">Paid</span>' : '<span style="color:orange;">Pending</span>'}
+          </div>
+          ${paymentDetails}
+          ${refundDetails}
+        `;
+      });
+    });
+  }
+</script>
+{% endblock %}

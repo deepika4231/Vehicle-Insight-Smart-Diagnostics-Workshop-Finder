@@ -1,0 +1,307 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f8fbff 0%, #e6ecf3 100%);
+    margin: 0;
+    padding: 0;
+    color: #333;
+    min-height: 100vh;
+  }
+  h3 {
+    text-align: center;
+    color: #2a2a72;
+    margin-top: 32px;
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 10px #e6ecf3, 0 1px 0 #fff;
+    position: relative;
+    z-index: 2;
+  }
+  .cancel-container {
+    max-width: 1250px;
+    margin: 48px auto 32px auto;
+    background: rgba(255,255,255,0.98);
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(44,62,80,0.13), 0 1.5px 0 #fff;
+    padding: 38px 24px 48px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cancel-container:before {
+    content: "";
+    position: absolute;
+    left: -80px;
+    top: -80px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #e6ecf3 60%, transparent 100%);
+    z-index: 0;
+    opacity: 0.5;
+  }
+  .cancel-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px;
+    justify-content: flex-start;
+    margin-top: 32px;
+    animation: fadeIn 1.2s;
+    z-index: 2;
+    position: relative;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: none;}
+  }
+  .cancel-card {
+    background: linear-gradient(120deg, #f7f9fc 80%, #e6ecf3 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.09), 0 1px 0 #fff;
+    width: 350px;
+    padding: 28px 22px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: box-shadow 0.25s, transform 0.22s;
+    margin-bottom: 20px;
+    border: 1.5px solid #e0e6f7;
+    overflow: hidden;
+  }
+  .cancel-card:before {
+    content: "";
+    position: absolute;
+    right: -40px;
+    bottom: -40px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #e6ecf3 60%, transparent 100%);
+    z-index: 0;
+    opacity: 0.4;
+  }
+  .cancel-card:hover {
+    box-shadow: 0 12px 36px rgba(44,62,80,0.18), 0 1px 0 #fff;
+    transform: translateY(-6px) scale(1.025);
+    border-color: #b3c6ff;
+  }
+  .cancel-image {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f2f2f2 80%, #e6ecf3 100%);
+    margin-bottom: 16px;
+    border: 2.5px solid #e0e0e0;
+    box-shadow: 0 2px 10px rgba(44,62,80,0.07);
+    z-index: 1;
+  }
+  .cancel-name {
+    font-size: 1.22rem;
+    font-weight: 800;
+    color: #2a2a72;
+    margin-bottom: 8px;
+    text-align: center;
+    min-height: 40px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 0 #fff;
+  }
+  .cancel-info {
+    font-size: 1.01rem;
+    color: #444;
+    margin-bottom: 4px;
+    text-align: center;
+    z-index: 1;
+  }
+  .cancel-price {
+    font-size: 1.13rem;
+    color: #007bff;
+    font-weight: 700;
+    margin: 8px 0 4px 0;
+  }
+  .cancel-year {
+    font-size: 0.99rem;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .cancel-qty {
+    font-size: 1.05rem;
+    color: #2a2a72;
+    margin-bottom: 10px;
+    font-weight: 700;
+    background: #e6ecf3;
+    padding: 4px 14px;
+    border-radius: 6px;
+    box-shadow: 0 1px 0 #fff;
+  }
+  .cancel-status, .refund-status {
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 1.05rem;
+    padding: 7px 18px;
+    border-radius: 7px;
+    display: inline-block;
+    text-align: center;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 0 #fff;
+    z-index: 1;
+  }
+  .cancel-status.cancelled {
+    background: linear-gradient(90deg, #e8f5e9 80%, #c8f7c5 100%);
+    color: #27ae60;
+    border: 1.5px solid #b2e6c1;
+  }
+  .cancel-status.pending {
+    background: linear-gradient(90deg, #fce4e4 80%, #ffd6d6 100%);
+    color: #e74c3c;
+    border: 1.5px solid #f5b7b1;
+  }
+  .refund-status.refunded {
+    background: linear-gradient(90deg, #e8f5e9 80%, #c8f7c5 100%);
+    color: #27ae60;
+    border: 1.5px solid #b2e6c1;
+  }
+  .refund-status.pending {
+    background: linear-gradient(90deg, #fce4e4 80%, #ffd6d6 100%);
+    color: #e74c3c;
+    border: 1.5px solid #f5b7b1;
+  }
+  .refund-status a {
+    color: #27ae60;
+    text-decoration: underline;
+    font-weight: 700;
+  }
+  .cancel-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 1;
+  }
+  .cancel-actions a {
+    background: linear-gradient(90deg, #007BFF 60%, #2a2a72 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.01rem;
+    transition: background 0.3s, box-shadow 0.2s;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+    border: none;
+    outline: none;
+  }
+  .cancel-actions a:hover {
+    background: linear-gradient(90deg, #2a2a72 60%, #007BFF 100%);
+    box-shadow: 0 4px 16px rgba(44,62,80,0.13);
+    color: #fff;
+  }
+  .no-data {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+    background: linear-gradient(90deg, #fff 80%, #e6ecf3 100%);
+    padding: 48px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(44,62,80,0.07);
+    width: 100%;
+    margin: 48px 0;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+  .button-link {
+    display: block;
+    width: fit-content;
+    margin: 40px auto 0 auto;
+    background: linear-gradient(90deg, #2a2a72 60%, #007BFF 100%);
+    color: white;
+    padding: 16px 38px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.18rem;
+    transition: background 0.3s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(44,62,80,0.10);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+  }
+  .button-link:hover {
+    background: linear-gradient(90deg, #007BFF 60%, #2a2a72 100%);
+    box-shadow: 0 8px 24px rgba(44,62,80,0.16);
+    color: #fff;
+  }
+  .button-link span {
+    position: relative;
+    z-index: 2;
+  }
+  .button-link::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg,#007BFF22 0%,#2a2a72 100%);
+    opacity: 0.08;
+    z-index: 1;
+  }
+  @media (max-width: 1100px) {
+    .cancel-grid { gap: 22px; }
+    .cancel-card { width: 95vw; max-width: 370px; }
+  }
+  @media (max-width: 700px) {
+    h3 { font-size: 2rem; }
+    .cancel-card { width: 98vw; max-width: 98vw; }
+    .cancel-grid { gap: 12px; }
+    .cancel-container { padding: 18px 2vw 32px 2vw; }
+  }
+</style>
+
+<div class="cancel-container">
+  <h3>
+    <span style="display:inline-block; vertical-align:middle;"></span>
+      <svg width="38" height="38" viewBox="0 0 24 24" fill="none" style="vertical-align:middle; margin-right:10px;">
+        <circle cx="12" cy="12" r="12" fill="#e74c3c"/>
+        <path d="M8 8l8 8M16 8l-8 8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </span>
+    Cancelled Orders
+  </h3>
+  <a href="cartdetails" class="button-link">
+    <span>&#128722; Continue Ordering</span>
+  </a>
+  <div class="cancel-grid">
+    {% for item in items %}
+    <div class="cancel-card">
+      <img src="{{ item.part_id.part_image.url }}" alt="Part Image" class="cancel-image" />
+      <div class="cancel-name">{{ item.part_id.part_name }}</div>
+      <div class="cancel-info"><strong>Part Number:</strong> {{ item.part_id.part_number }}</div>
+      <div class="cancel-info"><strong>Company:</strong> {{ item.part_id.company }}</div>
+      <div class="cancel-info"><strong>Vehicle Model:</strong> {{ item.part_id.vehicle_model }}</div>
+      <div class="cancel-qty"><strong>Quantity:</strong> {{ item.order_quantity }}</div>
+      <div class="cancel-year"><strong>Year:</strong> {{ item.part_id.part_year }}</div>
+      <div class="cancel-actions">
+        <a href="{% url 'orderforparts' item.part_id.id %}">Buy Again</a>
+      </div>
+      <div class="refund-status {% if item.refund_status == '1' %}refunded{% else %}pending{% endif %}">
+        {% if item.refund_status == '1' %}
+          <a href="{% url 'refund_receiptuser' item.id %}">Refunded</a>
+        {% else %}
+          Pending Refund
+        {% endif %}
+      </div>
+      <div class="cancel-status {% if item.cancel_status == '1' %}cancelled{% else %}pending{% endif %}">
+        {% if item.cancel_status == '1' %}
+          Cancelled
+        {% else %}
+          Pending Cancellation
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="no-data">No cancelled parts found.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

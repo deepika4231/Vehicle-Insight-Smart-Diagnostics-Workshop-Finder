@@ -1,0 +1,252 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Process</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2a2a72;
+      margin: 20px 0;
+      font-size: 2.5rem;
+    }
+
+    .payment-details {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-details span {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .payment-details p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .total-amount {
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 20px;
+      color: #27ae60;
+    }
+
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 1rem;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      margin: 20px 10px;
+      width: 45%;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .cancel-btn {
+      background-color: #e74c3c;
+      width: 45%;
+    }
+
+    .cancel-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 30px;
+      display: block;
+      font-size: 1rem;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .payment-details {
+        width: 95%;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    }
+
+  </style>
+</head>
+<body> -->
+  {% extends "userheader.html" %}
+{% block content %}
+
+   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2a2a72;
+      margin: 20px 0;
+      font-size: 2.5rem;
+    }
+
+    .payment-details {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-details span {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .payment-details p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .total-amount {
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 20px;
+      color: #27ae60;
+    }
+
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 1rem;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      margin: 20px 10px;
+      width: 45%;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .cancel-btn {
+      background-color: #e74c3c;
+      width: 45%;
+    }
+
+    .cancel-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 30px;
+      display: block;
+      font-size: 1rem;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .payment-details {
+        width: 95%;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    }
+
+  </style>
+
+  <h1>Transaction</h1>
+
+  <div class="payment-details">
+    <form method="POST">
+      {% csrf_token %}
+      <p><span>Part Name:</span> {{ order_item.part_id.part_name }}</p>
+      <p><span>Part Price:</span> ₹{{ order_item.part_id.part_price }}</p>
+      <p><span>Quantity:</span> {{ order_item.order_quantity }}</p>
+      <p><span>Part Number:</span> {{ order_item.part_id.part_number }}</p>
+      <p><span>Card Number:</span> **** **** **** {{ card_payment.cardno|slice:"-4:" }}</p>
+      <p><span>Card Holder Name:</span> {{ card_payment.name }}</p>
+      <p><span>Total Price:</span> ₹{{ card_payment.amount }}</p>
+      <p class="total-amount">Total Amount: ₹{{ card_payment.amount }}</p>
+      <div style="margin:15px 0; color:#2575fc; font-weight:600;">
+              Refund Policy: You can request a refund within 30 days from the payment date.
+            </div>
+
+      <!-- Confirm Payment Button -->
+      <a href="{% url 'orderdetails' %}" class="btn">Confirm Payment</a>
+
+      <!-- Cancel Payment Button -->
+      <a href="{% url 'cancelpaymentprocess' order_item.id %}" class="btn cancel-btn">Cancel</a>
+    </form>
+  </div>
+
+ 
+
+<!-- </body>
+</html> -->
+{% endblock %}

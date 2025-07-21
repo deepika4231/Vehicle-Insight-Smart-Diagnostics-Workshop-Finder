@@ -1,0 +1,463 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refund Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #d3cce3, #e9e4f0);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background-color: #3d3a54;
+      color: #fff;
+      border-bottom: 5px solid #ccc;
+    }
+
+    h3 {
+      font-size: 2.5rem;
+      color: #fff;
+      margin: 0;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 2rem auto;
+      max-width: 800px;
+    }
+
+    form input, form select {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    form button {
+      background-color: #3d3a54;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    form button:hover {
+      background-color: #2f2b44;
+    }
+
+    .table-container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #f2f2f2;
+    }
+
+    th {
+      background-color: #3d3a54;
+      color: white;
+      font-weight: 500;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .status-link a {
+      background-color: #28a745;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .status-link a:hover {
+      background-color: #218838;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    .back-btn {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .back-btn a {
+      background-color: #3d3a54;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn a:hover {
+      background-color: #2b293d;
+    }
+
+    @media (max-width: 768px) {
+      th, td {
+        font-size: 0.9rem;
+        padding: 12px;
+      }
+
+      img {
+        width: 60px;
+        height: 60px;
+      }
+
+      h3 {
+        font-size: 2rem;
+      }
+
+      form {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      form button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h3 {
+        font-size: 1.7rem;
+      }
+
+      .table-container {
+        padding: 0 1rem;
+      }
+
+      table, th, td {
+        font-size: 0.85rem;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .status-link a {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body> -->
+  {% extends 'adminheader.html' %}
+{% block content %}
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #d3cce3, #e9e4f0);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background-color: #3d3a54;
+      color: #fff;
+      border-bottom: 5px solid #ccc;
+    }
+
+    h3 {
+      font-size: 2.5rem;
+      color: #fff;
+      margin: 0;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 2rem auto;
+      max-width: 800px;
+    }
+
+    form input, form select {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    form button {
+      background-color: #3d3a54;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    form button:hover {
+      background-color: #2f2b44;
+    }
+
+    .table-container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #f2f2f2;
+    }
+
+    th {
+      background-color: #3d3a54;
+      color: white;
+      font-weight: 500;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .status-link a {
+      background-color: #28a745;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .status-link a:hover {
+      background-color: #218838;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    .back-btn {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .back-btn a {
+      background-color: #3d3a54;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn a:hover {
+      background-color: #2b293d;
+    }
+
+    @media (max-width: 768px) {
+      th, td {
+        font-size: 0.9rem;
+        padding: 12px;
+      }
+
+      img {
+        width: 60px;
+        height: 60px;
+      }
+
+      h3 {
+        font-size: 2rem;
+      }
+
+      form {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      form button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h3 {
+        font-size: 1.7rem;
+      }
+
+      .table-container {
+        padding: 0 1rem;
+      }
+
+      table, th, td {
+        font-size: 0.85rem;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .status-link a {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+
+  <header>
+    <h3>Refund Details</h3>
+  </header>
+
+  <!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+  </form> -->
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Part Name</th>
+          <th>Part Number</th>
+          <th>Company</th>
+          <th>Vehicle Model</th>
+          <th>Quantity</th>
+          <th>Part Year</th>
+          <th>Part Image</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>{{ item.order_user.name }}</td>
+          <td>{{ item.part_id.part_name }}</td>
+          <td>{{ item.part_id.part_number }}</td>
+          <td>{{ item.part_id.company }}</td>
+          <td>{{ item.part_id.vehicle_model }}</td>
+          <td>{{ item.order_quantity }}</td>
+          <td>{{ item.part_id.part_year }}</td>
+          <td><img src="{{ item.part_id.part_image.url }}" alt="{{ item.part_id.part_name }} Image"></td>
+          <td class="status-link">
+            <a href="{% url 'refund_receipt' item.id %}">Refunded</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="no-data">No parts found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+<!-- </body>
+</html> -->
+{% endblock %}

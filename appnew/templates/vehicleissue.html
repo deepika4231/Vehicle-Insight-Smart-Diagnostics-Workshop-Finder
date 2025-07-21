@@ -1,0 +1,28 @@
+{% extends "userheader.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">🚗 Vehicle Fault Diagnosis</h2>
+
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="vehicle_fault" class="form-label">Describe the Issue:</label>
+            <textarea name="vehicle_fault" id="vehicle_fault" class="form-control" rows="4" required>{{ request.POST.vehicle_fault }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Diagnosis</button>
+    </form>
+
+    {% if diagnosis %}
+      <div class="alert alert-light border mt-4">
+        {{ diagnosis|safe }}
+      </div>
+    {% endif %}
+
+    {% if error %}
+      <div class="alert alert-danger mt-4">
+        {{ error }}
+      </div>
+    {% endif %}
+</div>
+{% endblock %}

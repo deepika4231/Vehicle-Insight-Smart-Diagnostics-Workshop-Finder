@@ -1,0 +1,356 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Quantity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #eef2f7, #ffffff);
+      color: #333;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #2a2a72;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 8px 0;
+      color: #555;
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2a2a72;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1e1e5b;
+    }
+
+    .out-of-stock {
+      text-align: center;
+      color: #d9534f;
+      font-weight: 500;
+      margin-top: 20px;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin: 25px auto 10px;
+      color: #2a2a72;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #1e1e5b;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 40px 20px;
+        padding: 25px 20px;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body> -->
+ 
+ 
+  {% extends "userheader.html" %}
+{% block content %}
+   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #eef2f7, #ffffff);
+      color: #333;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #2a2a72;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 8px 0;
+      color: #555;
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2a2a72;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1e1e5b;
+    }
+
+    .out-of-stock {
+      text-align: center;
+      color: #d9534f;
+      font-weight: 500;
+      margin-top: 20px;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin: 25px auto 10px;
+      color: #2a2a72;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #1e1e5b;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 40px 20px;
+        padding: 25px 20px;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+  <!-- <div class="container">
+    <h2>Choose Quantity</h2>
+
+    {% if part.part_id.stock > 0 %}
+      <p><strong>Available:</strong> {{ part.part_id.stock }}</p>
+      <p><strong>Price per Unit:</strong> ₹{{ part.part_id.part_price }}</p>
+
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Confirm Purchase</button>
+      </form>
+    {% else %}
+      <p class="out-of-stock">Out of Stock</p>
+    {% endif %}
+  </div>
+
+  <a href="../../cartdetails" class="back-link">← Back to Cart</a>
+
+ -->
+
+<div class="container">
+  <h2>Choose Quantity</h2>
+
+  {% if part.part_id.stock > 0 %}
+    <p><strong>Available:</strong> {{ part.part_id.stock }}</p>
+    <p><strong>Price per Unit:</strong> ₹{{ part.part_id.part_price }}</p>
+
+    <form method="POST" id="quantityForm">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Confirm Purchase</button>
+    </form>
+  {% else %}
+    <p class="out-of-stock">Out of Stock</p>
+  {% endif %}
+</div>
+
+<a href="../../cartdetails" class="back-link">← Back to Cart</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('quantityForm');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const stock = {{ part.part_id.stock }};
+      const qtyInput = form.querySelector('input[name$="quantity"], input[type="number"]');
+      if (qtyInput) {
+        const qty = parseInt(qtyInput.value, 10);
+        if (qty > stock) {
+          alert('You cannot choose a quantity greater than available stock ({{ part.part_id.stock }}).');
+          qtyInput.focus();
+          e.preventDefault();
+        }
+      }
+    });
+  }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const validators = [];
+
+  // Reusable validation function
+  function handleValidation(input, pattern, validMsg, invalidMsg, extraCheck = null) {
+    const feedback = document.createElement('small');
+    feedback.style.display = 'block';
+    feedback.style.marginTop = '4px';
+    input.parentNode.appendChild(feedback);
+
+    function validate() {
+      const value = input.value.trim();
+      if (!value) {
+        feedback.textContent = '❌ This field is required';
+        feedback.style.color = 'red';
+        return false;
+      } else if (!pattern.test(value)) {
+        feedback.textContent = '❌ ' + invalidMsg;
+        feedback.style.color = 'red';
+        return false;
+      } else if (extraCheck && !extraCheck(Number(value))) {
+        feedback.textContent = '❌ Quantity exceeds available stock';
+        feedback.style.color = 'red';
+        return false;
+      } else {
+        feedback.textContent = '✅ ' + validMsg;
+        feedback.style.color = 'green';
+        return true;
+      }
+    }
+
+    input.addEventListener('input', validate);
+    validators.push(validate);
+  }
+
+  // ✅ Quantity validation (numeric and ≤ stock)
+  const stock = {{ part.part_id.stock }};
+  const qtyInput = document.querySelector('input[name$="quantity"], input[type="number"]');
+  if (qtyInput) {
+    qtyInput.setAttribute('min', '1');
+    qtyInput.setAttribute('max', stock);
+    qtyInput.setAttribute('type', 'number');
+    handleValidation(
+      qtyInput,
+      /^[0-9]+$/,
+      'Valid quantity',
+      'Only positive numbers are allowed',
+      (val) => val <= stock && val > 0
+    );
+  }
+
+  // ✅ Prevent form submission on error
+  const form = document.querySelector('#quantityForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      let isValid = true;
+      validators.forEach(validateFn => {
+        if (!validateFn()) isValid = false;
+      });
+      if (!isValid) {
+        e.preventDefault();
+        alert("❌ Please correct the errors before submitting.");
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}

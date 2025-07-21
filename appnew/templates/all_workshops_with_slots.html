@@ -1,0 +1,192 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 50px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+        padding: 40px 50px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #1d3557;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .workshop-block {
+        margin-bottom: 50px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #dfe6ed;
+    }
+
+    .workshop-block h2 {
+        color: #2a71d0;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .workshop-block p {
+        font-size: 1rem;
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    th {
+        background: #2a71d0;
+        color: white;
+        padding: 14px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    td {
+        background: #f9fbfe;
+        padding: 14px;
+        text-align: center;
+        font-size: 0.95rem;
+        color: #34495e;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .book-btn {
+        background: linear-gradient(135deg, #43cea2, #185a9d);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+        display: inline-block;
+        box-shadow: 0 5px 15px rgba(24, 90, 157, 0.2);
+    }
+
+    .book-btn:hover {
+        background: linear-gradient(135deg, #185a9d, #43cea2);
+        box-shadow: 0 10px 25px rgba(24, 90, 157, 0.4);
+    }
+
+    .btn-disabled {
+        background: #ccc;
+        color: #666;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        pointer-events: none;
+        cursor: not-allowed;
+        display: inline-block;
+    }
+
+    .no-slots {
+        color: #888;
+        font-style: italic;
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 30px 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        .workshop-block h2 {
+            font-size: 1.5rem;
+        }
+
+        table th,
+        table td {
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+
+        .book-btn,
+        .btn-disabled {
+            padding: 6px 14px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <h1>All Workshops & Available Slots</h1>
+
+    {% for item in workshop_slots %}
+    <div class="workshop-block">
+        <h2>{{ item.workshop.workshopname }}</h2>
+        <p>
+            <strong>Address:</strong> {{ item.workshop.adress }}<br>
+            <strong>District:</strong> {{ item.workshop.district }}<br>
+            <strong>City:</strong> {{ item.workshop.city }}<br>
+            <strong>Contact:</strong> {{ item.workshop.wcontactno }}
+        </p>
+
+        {% if item.slots %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in item.slots %}
+                <tr>
+                    <td>{{ slot.date }}</td>
+                    <td>{{ slot.time|time:"h:i A" }}</td>
+                    <td>
+    {% if complaints == 0 %}
+        {% if slot.date > today %}
+            <a href="{% url 'appointment' slot.id item.workshop.id %}" class="book-btn">Book Appointment</a>
+        {% elif slot.date == today %}
+            {% if slot.time >= now %}
+                <a href="{% url 'appointment' slot.id item.workshop.id %}" class="book-btn">Book Appointment</a>
+            {% else %}
+                <span class="btn-disabled">Book Appointment</span>
+            {% endif %}
+        {% else %}
+            <span class="btn-disabled">Book Appointment</span>
+        {% endif %}
+    {% else %}
+        <span class="btn-disabled">Already booked. Complete current booking first.</span>
+    {% endif %}
+</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-slots">No available slots.</div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p>No workshops found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

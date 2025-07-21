@@ -1,0 +1,255 @@
+{% extends "indexheader.html" %}
+{% block content %}
+{% load static %}
+<style>
+  :root {
+    --primary-color: #1A73E8;
+    --secondary-color: #f9f9f9;
+    --text-color: #333;
+    --accent-color: #0F9D58;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  .about-hero {
+    background: linear-gradient(90deg, var(--primary-color) 60%, #0F9D58 100%);
+    color: #fff;
+    padding: 3rem 1rem 2rem 1rem;
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 4px 24px rgba(26,115,232,0.08);
+  }
+  .about-hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .about-hero p {
+    font-size: 1.25rem;
+    margin: 0 auto;
+    max-width: 700px;
+    opacity: 0.95;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  .about-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    align-items: center;
+    margin-bottom: 2.5rem;
+  }
+  .about-content {
+    flex: 1 1 350px;
+    min-width: 300px;
+  }
+  .about-content h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  .about-content h4 {
+    color: var(--accent-color);
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+  .about-content ul {
+    margin: 0.5rem 0 1.2rem 1.2rem;
+    padding: 0;
+    color: #444;
+  }
+  .about-content li {
+    margin-bottom: 0.5rem;
+  }
+  .about-image {
+    flex: 1 1 320px;
+    min-width: 260px;
+    text-align: center;
+  }
+  .about-image img {
+    max-width: 95%;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(26,115,232,0.10);
+  }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+  .feature-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem 1.2rem 1.5rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    border-top: 4px solid var(--primary-color);
+  }
+  .feature-card:hover {
+    transform: translateY(-7px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(26,115,232,0.10);
+    border-top: 4px solid var(--accent-color);
+  }
+  .feature-card h3 {
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-bottom: 0.7rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .feature-card p {
+    color: #444;
+    font-size: 1rem;
+    margin: 0;
+  }
+  .gallery-section {
+    margin: 3rem 0 2rem 0;
+  }
+  .gallery-title {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .gallery-item {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.2s;
+    text-align: center;
+  }
+  .gallery-item:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(26,115,232,0.10);
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--primary-color);
+  }
+  .gallery-item h4 {
+    margin: 1rem 0 0.5rem 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .gallery-item p {
+    color: #444;
+    font-size: 0.97rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+  @media (max-width: 900px) {
+    .about-section { flex-direction: column; }
+    .about-image { margin-top: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .about-hero h1 { font-size: 2rem; }
+    .about-content h2 { font-size: 1.3rem; }
+    .gallery-title { font-size: 1.3rem; }
+  }
+</style>
+
+<div class="about-hero">
+  <h1>About Vehicle Insight</h1>
+  <p>
+    Vehicle Insight is an innovative web platform dedicated to transforming the automotive maintenance experience. Our mission is to empower vehicle owners with intelligent tools that simplify diagnostics, streamline service bookings, and connect users with trusted professionals—all through a user-friendly interface.
+  </p>
+</div>
+
+<div class="container">
+  <div class="about-section">
+    <div class="about-content">
+      <h2>Welcome to Vehicle Insight</h2>
+      <h4>About Us</h4>
+      <div>
+        Vehicle Insight is your smart companion for all things automotive. We blend technology and expertise to make car care simple, transparent, and reliable.
+      </div>
+      <h4>Our Vision</h4>
+      <div>
+        We envision a world where vehicle maintenance is no longer a daunting task. By integrating advanced technologies, we provide a seamless, transparent, and efficient solution for all automotive care needs.
+      </div>
+      <h4>Our Commitment</h4>
+      <ul>
+        <li><strong>Innovation:</strong> Continuously enhancing our platform with the latest technologies to meet evolving user needs.</li>
+        <li><strong>Quality:</strong> Ensuring that all service providers and experts within our network meet stringent quality standards.</li>
+        <li><strong>User-Centricity:</strong> Prioritizing user experience by offering intuitive interfaces and responsive support.</li>
+      </ul>
+      <h4>Join Us</h4>
+      <div>
+        Whether you're a vehicle owner seeking reliable diagnostics, a workshop aiming to expand your reach, or an expert wishing to offer your services, Vehicle Insight provides the tools and platform to connect and grow.
+      </div>
+    </div>
+    <div class="about-image">
+      <img src="{% static 'user/images/resource/about-img.jpg' %}" alt="About Vehicle Insight">
+    </div>
+  </div>
+
+  <section class="gallery-section">
+    <div class="gallery-title">What We Offer</div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="{% static 'user/images/gallery/2.jpg' %}" alt="Smart Diagnostics">
+        <h4>Smart Diagnostics</h4>
+        <p>AI-driven algorithms interpret natural language and images to accurately diagnose vehicle issues, ensuring comprehensive problem identification.</p>
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'user/images/gallery/1.jpg' %}" alt="Workshop Finder">
+        <h4>Workshop Finder</h4>
+        <p>Find certified service providers near you using GPS technology for maximum convenience and minimum downtime.</p>
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'user/images/gallery/5.jpg' %}" alt="Expert Consultations">
+        <h4>Expert Consultations</h4>
+        <p>Engage in real-time video conferencing with certified automotive experts for personalized advice and solutions.</p>
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'user/images/gallery/6.jpg' %}" alt="Integrated Services">
+        <h4>Integrated Services</h4>
+        <p>From secure online payments to genuine parts ordering, our platform is your one-stop solution for all vehicle maintenance needs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center;">Platform Features</h2>
+    <div class="features">
+      <div class="feature-card">
+        <h3>Smart Diagnostics</h3>
+        <p>AI-powered symptom and image analysis for accurate, fast vehicle issue detection.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Workshop Finder</h3>
+        <p>Instantly locate certified workshops and service providers near you.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Expert Consultations</h3>
+        <p>Real-time video calls with automotive experts for complex issues and advice.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Integrated Services</h3>
+        <p>Book services, order genuine parts, and make secure payments—all in one place.</p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

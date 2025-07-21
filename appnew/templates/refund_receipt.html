@@ -1,0 +1,113 @@
+{% extends 'adminheader.html' %}
+{% block content %}
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f9fafb;
+    margin: 0;
+    padding: 40px 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #b91c1c;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+  }
+  .receipt-container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+    padding: 40px;
+    border-left: 8px solid #dc2626;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-title {
+    font-weight: 600;
+    color: #1f2937;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 5px;
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    font-size: 16px;
+    color: #374151;
+  }
+  .label {
+    font-weight: 500;
+  }
+  .value {
+    font-weight: 600;
+  }
+  .total-amount {
+    text-align: right;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #dc2626;
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 20px;
+  }
+  .ok-btn-wrapper {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .ok-btn {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .ok-btn:hover {
+    background-color: #b91c1c;
+  }
+</style>
+
+<h1>Refund Receipt</h1>
+
+<div class="receipt-container">
+  <!-- Part Details -->
+  <div class="section-title">Part Details</div>
+  <div class="detail-row"><div class="label">Part Name:</div><div class="value">{{ order_item.part_id.part_name }}</div></div>
+  <div class="detail-row"><div class="label">Part Number:</div><div class="value">{{ order_item.part_id.part_number }}</div></div>
+  <div class="detail-row"><div class="label">Part Price:</div><div class="value">₹{{ order_item.part_id.part_price }}</div></div>
+  <div class="detail-row"><div class="label">Quantity:</div><div class="value">{{ order_item.order_quantity }}</div></div>
+
+  <!-- Debit From -->
+  <div class="section-title">Refund Debited From</div>
+  <div class="detail-row"><div class="label">Card Holder:</div><div class="value">{{ card_payment.name }}</div></div>
+  <div class="detail-row"><div class="label">Card Number:</div><div class="value">**** **** **** {{ card_payment.cardno|slice:"-4:" }}</div></div>
+  <div class="detail-row"><div class="label">Refunded Amount:</div><div class="value">₹{{ card_payment.refund_amount }}</div></div>
+
+  <!-- Credit To -->
+  <div class="section-title">Refund Credited To</div>
+  <div class="detail-row"><div class="label">Card Holder:</div><div class="value">{{ user_detail.name }}</div></div>
+  <div class="detail-row"><div class="label">Card Number:</div><div class="value">**** **** **** {{ user_detail.cardno|slice:"-4:" }}</div></div>
+  <div class="detail-row"><div class="label">Amount Received:</div><div class="value">₹{{ user_detail.amount }}</div></div>
+
+  <!-- Total -->
+  <div class="total-amount">Total Refunded: ₹{{ user_detail.amount }}</div>
+
+  <!-- OK Button -->
+  <div class="ok-btn-wrapper">
+    <a href="{% url 'refundlist' %}">
+      <button type="button" class="ok-btn">OK</button>
+    </a>
+  </div>
+</div>
+{% endblock %}

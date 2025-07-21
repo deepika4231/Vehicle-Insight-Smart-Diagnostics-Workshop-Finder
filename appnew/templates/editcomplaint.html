@@ -1,0 +1,123 @@
+{% extends 'userheader.html' %}
+{% block content %}
+<style>
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  .error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    display: none;
+  }
+
+  button {
+    background: linear-gradient(to right, #6c9dff, #4a80e0);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #4a80e0;
+    transform: scale(1.05);
+  }
+</style>
+
+<h2>Edit Complaint</h2>
+
+<form method="post" id="complaintForm" novalidate>
+  {% csrf_token %}
+
+  <label for="id_complaint_subject">Subject</label>
+  <input type="text" name="complaint_subject" id="id_complaint_subject" value="{{ form.complaint_subject.value|default:'' }}" required>
+  <div id="subjectError" class="error">Subject is required (at least 5 characters).</div>
+
+  <label for="id_complaint_text">Complaint</label>
+  <textarea name="complaint_text" id="id_complaint_text" rows="5" required>{{ form.complaint_text.value|default:'' }}</textarea>
+  <div id="textError" class="error">Complaint text is required (at least 10 characters).</div>
+
+  <button type="submit">Update Complaint</button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('complaintForm');
+    const subject = document.getElementById('id_complaint_subject');
+    const text = document.getElementById('id_complaint_text');
+    const subjectError = document.getElementById('subjectError');
+    const textError = document.getElementById('textError');
+
+    function validateSubject() {
+      const value = subject.value.trim();
+      if (value.length < 5) {
+        subjectError.style.display = 'block';
+        return false;
+      } else {
+        subjectError.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateText() {
+      const value = text.value.trim();
+      if (value.length < 10) {
+        textError.style.display = 'block';
+        return false;
+      } else {
+        textError.style.display = 'none';
+        return true;
+      }
+    }
+
+    subject.addEventListener('input', validateSubject);
+    text.addEventListener('input', validateText);
+
+    form.addEventListener('submit', function (e) {
+      const isSubjectValid = validateSubject();
+      const isTextValid = validateText();
+
+      if (!isSubjectValid || !isTextValid) {
+        e.preventDefault(); // prevent form submission
+      }
+    });
+  });
+</script>
+{% endblock %}

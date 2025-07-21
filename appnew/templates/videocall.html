@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <style>
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #ffffff;
+            border: 1px solid #007bff;
+            color: #007bff ;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        {{ pk }}  <!-- Displays the appointment ID -->
+    </div>
+</body>
+
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+<script>
+window.onload = function () {
+    function getUrlParams(url) {
+        let urlStr = url.split('?')[1];
+        const urlSearchParams = new URLSearchParams(urlStr);
+        return Object.fromEntries(urlSearchParams.entries());
+    }
+
+    // Generate Token
+    const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
+    const userID = Math.floor(Math.random() * 10000) + "";
+    const userName = "userName" + userID;
+    const appID = 642857972;
+    const serverSecret = "06a1b078b3cb272878a7d4df5af0f0ab";
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
+    zp.joinRoom({
+        container: document.querySelector("#root"),
+        sharedLinks: [{
+            name: 'Personal link',
+            url: window.location.protocol + '//' + window.location.host  + window.location.pathname + '?roomID=' + roomID,
+        }],
+        scenario: {
+            mode: ZegoUIKitPrebuilt.VideoConference,
+        },
+        turnOnMicrophoneWhenJoining: true,
+        turnOnCameraWhenJoining: true,
+        showMyCameraToggleButton: true,
+        showMyMicrophoneToggleButton: true,
+        showScreenSharingButton: true,
+        showTextChat: true,
+        showUserList: true,
+        maxUsers: 50,
+        layout: "Auto",
+        showLayoutButton: true,
+    });
+
+    // Handle 'Join Now' button click event
+    document.getElementById("joinNowBtn").onclick = function () {
+        // Get generated URL
+        const generatedUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + roomID;
+
+        // Get appointment ID safely
+        const appointmentId = "{{ pk|default:'null' }}";  
+        console.log("Appointment ID:", appointmentId);
+        console.log("Generated URL:", generatedUrl);
+
+        // Validate appointment ID before making request
+        if (appointmentId && appointmentId !== "null") {
+            fetch(`/save-appointment-url/${appointmentId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({
+                    url: generatedUrl,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("URL saved successfully!");
+                } else {
+                    console.error("Error saving URL:", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Fetch request error:", error);
+            });
+        } else {
+            console.error("Invalid appointment ID. Cannot proceed with request.");
+        }
+    };
+};
+</script>
+
+<center>
+    <button id="joinNowBtn" class="btn">Save Video Link</button>
+</center>
+
+</body>
+</html>

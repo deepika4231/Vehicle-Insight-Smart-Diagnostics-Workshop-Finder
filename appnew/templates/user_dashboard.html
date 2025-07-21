@@ -1,0 +1,133 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+.dashboard-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    padding: 36px 28px 28px 28px;
+}
+h2 {
+    color: #007bff;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.section {
+    margin-bottom: 38px;
+}
+.booking-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.booking-item {
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.booking-info {
+    flex: 1 1 60%;
+}
+.booking-status {
+    font-weight: 600;
+    color: #007bff;
+    margin-left: 18px;
+}
+.no-data {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    margin: 18px 0 0 0;
+}
+.section-link {
+    display: block;
+    text-align: right;
+    margin-bottom: 10px;
+}
+.section-link a {
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.section-link a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+@media (max-width: 700px) {
+    .dashboard-container { padding: 16px 4px; }
+    .booking-item { flex-direction: column; align-items: flex-start; }
+    .booking-status { margin-left: 0; margin-top: 8px; }
+    .section-link { text-align: center; }
+}
+</style>
+
+<div class="dashboard-container">
+    <h2>Active Workshop Bookings</h2>
+    <div class="section-link">
+        <a href="{% url 'viewappoinment' %}">View All Workshop Appointments &rarr;</a>
+    </div>
+    <div class="section">
+        {% if active_workshop_bookings %}
+            <ul class="booking-list">
+                {% for booking in active_workshop_bookings %}
+                <li class="booking-item">
+                    <div class="booking-info">
+                        <strong>{{ booking.workshopid.workshopname }}</strong><br>
+                        <span>Date: {{ booking.slot.date }} | Time: {{ booking.slot.time|time:"H:i" }}</span><br>
+                        <span>Issue: {{ booking.issue }}</span><br>
+                        <span> payment :
+                         {% if booking.payment_status == "0" %}
+          {% if booking.status == "accepted" %}
+            <a href="{% url 'servicecharge' booking.id %}" onclick="return confirm('Pay now?');">Pay Now</a>
+          {% else %}
+            <span style="color: #e67e22; font-style: italic; background: none; padding: 0;">Waiting for your appointment to be accepted...</span>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'service_charge_receipt' booking.id %}">Receipt</a>
+          
+        {% endif %}
+        </span>
+                    </div>
+                    <span class="booking-status">{{ booking.status|capfirst }}</span>
+
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="no-data">No active workshop bookings.</div>
+        {% endif %}
+    </div>
+
+    <h2>Active Expert Bookings</h2>
+    <div class="section-link">
+        <a href="{% url 'my_booked_slots' %}">View All Expert Bookings &rarr;</a>
+    </div>
+    <div class="section">
+        {% if active_expert_bookings %}
+            <ul class="booking-list">
+                {% for booking in active_expert_bookings %}
+                <li class="booking-item">
+                    <div class="booking-info">
+                        <strong>{{ booking.slot.expert.name }}</strong><br>
+                        <span>Date: {{ booking.slot.date }} | Time: {{ booking.slot.start_time|time:"H:i" }} - {{ booking.slot.end_time|time:"H:i" }}</span>
+                    </div>
+                    <span class="booking-status">Booked</span>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="no-data">No active expert bookings.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

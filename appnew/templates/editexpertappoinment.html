@@ -1,0 +1,89 @@
+{% extends 'userheader.html' %}
+{% block content %}
+    <style>
+        .edit-slot-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 24px 40px;
+        }
+        .edit-slot-container h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 28px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #34495e;
+        }
+        .form-select, button[type="submit"] {
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .form-select {
+            padding: 10px;
+            border: 1px solid #bfc9d1;
+            margin-bottom: 18px;
+        }
+        button[type="submit"] {
+            background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 0;
+            width: 100%;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: background 0.2s;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #38c6ff 0%, #4f8cff 100%);
+        }
+        ul {
+            margin-top: 18px;
+            padding-left: 20px;
+        }
+        ul li {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+    </style>
+    <div class="edit-slot-container">
+        <h1>
+            <i class="fa fa-calendar-edit" aria-hidden="true"></i>
+            Edit Expert Slot Booking
+        </h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="slotid" class="form-label">Select Slot:</label>
+                <select id="slotid" name="slotid" class="form-select" required>
+                    <option value="">Select a slot</option>
+                    {% for slot in slots %}
+                        <option value="{{ slot.id }}"
+                            {% if slot.id == current_slot_id %}selected{% endif %}>
+                            {{ slot.date }} - {{ slot.start_time|time:"H:i" }} to {{ slot.end_time|time:"H:i" }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit">
+                <i class="fa fa-save"></i> Save Changes
+            </button>
+        </form>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <!-- Font Awesome CDN for icons (optional, remove if already included) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+{% endblock %}

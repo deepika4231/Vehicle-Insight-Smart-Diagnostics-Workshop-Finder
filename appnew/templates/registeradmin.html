@@ -1,0 +1,138 @@
+{% extends "indexheader.html" %}
+{% block content %}
+<style>
+  :root {
+    --primary: #6366f1;
+    --accent: #ec4899;
+    --bg-light: #f9f9fb;
+    --text-dark: #1f2937;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    padding: 35px 30px;
+    max-width: 450px;
+    width: 100%;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(15px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  h2 {
+    text-align: center;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  form {
+    display: flex;
+
+    flex-direction: column;
+  }
+    .center-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
+    padding: 20px 0;
+  }
+
+  form p {
+    margin-bottom: 18px;
+    font-size: 15px;
+    color: #555;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border 0.25s ease;
+    margin-bottom: 10px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  button {
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #4f46e5;
+  }
+
+  .login-link {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .login-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 500px) {
+    .card {
+      padding: 30px 20px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    input, button {
+      font-size: 14px;
+    }
+  }
+</style>
+<div class="center-wrapper">
+  <div class="card">
+    <h2>📝 Create Your Smart Account</h2>
+    <form method="post">
+      {% csrf_token %}
+    
+      {{ form2.as_p }}
+      <button type="submit">Register</button>
+    </form>
+    <div class="login-link">
+      Already a member? <a href="{% url 'userlogin' %}">Login here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

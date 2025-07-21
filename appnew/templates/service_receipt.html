@@ -1,0 +1,170 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Service Charge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #fceae8, #ffffff);
+      margin: 0;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #b91c1c;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+    }
+
+    .refund-details {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-top: 6px solid #f87171;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .refund-details p {
+      margin: 16px 0;
+      font-size: 16px;
+    }
+
+    .refund-details span {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .total-amount {
+      text-align: right;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #b91c1c;
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+
+    button {
+      background-color: #dc2626;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 1rem;
+      display: block;
+      margin: 40px auto 0;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b91c1c;
+    }
+  </style>
+</head>
+<body> -->
+   {% extends "userheader.html" %}
+{% block content %}
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #fceae8, #ffffff);
+      margin: 0;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #b91c1c;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+    }
+
+    .refund-details {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-top: 6px solid #f87171;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .refund-details p {
+      margin: 16px 0;
+      font-size: 16px;
+    }
+
+    .refund-details span {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .total-amount {
+      text-align: right;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #b91c1c;
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+
+    button {
+      background-color: #dc2626;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 1rem;
+      display: block;
+      margin: 40px auto 0;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b91c1c;
+    }
+  </style>
+  <h1>Service charge Receipt</h1>
+  <div class="refund-details">
+    <form method="POST">
+      {% csrf_token %}
+      <p><span>workshop Name:</span> {{ order_item.workshopid.workshopname }}</p>
+      <p><span>Customer Name:</span> {{ order_item.userid.name}}</p>
+      <p><span>Service charge:</span> {{ order_item.service_charge }}</p>
+      <p><span>Total Amount:</span> ₹{{ order_item.amount}}</p>
+      <p><span>Card Number:</span> **** **** **** {{ card_payment.cardno|slice:"-4:" }}</p>
+      <p><span>Card Holder Name:</span> {{ card_payment.name }}</p>
+      <p><span>Total Amount:</span> ₹{{ card_payment.amount }}</p>
+
+      <p class="total-amount">Total Amount: ₹{{ card_payment.amount }}</p>
+    </form>
+    <a href="{% url 'viewappoinment' %}">
+  <button type="button">OK</button>
+</a>
+    <!-- Optional Confirm Button -->
+    <!-- <button type="submit">Confirm Refund</button> -->
+  </div>
+<!-- </body>
+</html> -->
+{% endblock %}

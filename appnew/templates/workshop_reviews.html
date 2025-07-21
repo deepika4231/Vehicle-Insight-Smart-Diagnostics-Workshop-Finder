@@ -1,0 +1,64 @@
+
+     {% extends "userheader.html" %}
+{% block content %}
+
+<style>
+        body { font-family: Arial, sans-serif; background: #f7f9fb; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 30px; }
+        h2 { text-align: center; color: #007bff; margin-bottom: 25px; }
+        .review-item { border-bottom: 1px solid #e0e0e0; padding: 15px 0; }
+        .review-item:last-child { border-bottom: none; }
+        .review-rating { color: #ffc107; font-weight: bold; }
+        .review-user { font-weight: 500; }
+        .review-date { color: #888; font-size: 0.9em; }
+        .no-data { text-align: center; color: #999; padding: 30px 0; font-style: italic; }
+        .back-link { display: block; text-align: center; margin-top: 18px; color: #007bff; text-decoration: none; font-weight: 500; }
+        .back-link:hover { text-decoration: underline; }
+        .appointment-link {
+            display: block;
+            text-align: center;
+            margin-bottom: 18px;
+            color: #fff;
+            background: #28a745;
+            padding: 10px 0;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .appointment-link:hover {
+            background: #218838;
+        }
+    </style>
+    <div class="container">
+        <a class="appointment-link" href="{% url 'workshop_slots' workshop.id %}">Book Appointment</a>
+        <h2>All Reviews for {{ workshop.workshopname }}</h2>
+        <span style="color:#ffc107;">
+            {% if workshop.average_rating %}
+                Average: {{ workshop.average_rating }} ★
+            {% else %}
+                No ratings yet
+            {% endif %}
+        </span>
+        <div style="margin-top:18px;">
+            {% if reviews %}
+                {% for review in reviews %}
+                    <div class="review-item">
+                        <span class="review-user">{{ review.user.name }}</span>
+                        <span class="review-rating">({{ review.rating }}★)</span>
+                        <span class="review-date">{{ review.created_at|date:"d M Y H:i" }}</span>
+                        <br>
+                        {{ review.comment }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">No reviews yet.</div>
+            {% endif %}
+        </div>
+        <a class="back-link" href="{% url 'workshopdetailpage' %}">← Back to Workshops</a>
+    </div>
+<!-- </body>
+</html> -->
+{% endblock %}

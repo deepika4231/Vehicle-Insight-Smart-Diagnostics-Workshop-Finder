@@ -1,0 +1,418 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parts Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f8fbff, #e6ecf3);
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    h3 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #2a2a72;
+      margin-top: 40px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      justify-content: center;
+      margin: 40px auto 0 auto;
+      max-width: 1200px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      padding: 18px 18px 22px 18px;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .product-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    }
+    .product-image {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: #f2f2f2;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      transition: transform 0.3s ease;
+    }
+    .product-image:hover {
+      transform: scale(1.05);
+    }
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 6px;
+      text-align: center;
+      min-height: 40px;
+    }
+    .product-info {
+      font-size: 0.97rem;
+      color: #444;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .product-price {
+      font-size: 1.1rem;
+      color: #007bff;
+      font-weight: 700;
+      margin: 8px 0 4px 0;
+    }
+    .product-year {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .action-link {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    .action-link:hover {
+      background-color: #218838;
+    }
+    .no-data {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 40px 0;
+      width: 100%;
+    }
+    .back-button {
+      text-align: center;
+      margin: 40px 0;
+    }
+    .back-button a {
+      display: inline-block;
+      background-color: #2a2a72;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+    .back-button a:hover {
+      background-color: #1d1d5b;
+    }
+    /* Modal (Lightbox) Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: auto;
+      padding-top: 60px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 80%;
+      margin: auto;
+    }
+    .modal img {
+      width: 100%;
+      height: auto;
+    }
+    .close {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      transition: 0.3s;
+    }
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    @media (max-width: 900px) {
+      .product-grid { gap: 18px; }
+      .product-card { width: 90vw; max-width: 320px; }
+    }
+    @media (max-width: 600px) {
+      h3 { font-size: 2rem; }
+      .product-card { width: 98vw; max-width: 98vw; }
+      .product-grid { gap: 10px; }
+    }
+  </style>
+</head>
+<body> -->
+ <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f8fbff, #e6ecf3);
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    h3 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #2a2a72;
+      margin-top: 40px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      justify-content: center;
+      margin: 40px auto 0 auto;
+      max-width: 1200px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      padding: 18px 18px 22px 18px;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .product-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    }
+    .product-image {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: #f2f2f2;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      transition: transform 0.3s ease;
+    }
+    .product-image:hover {
+      transform: scale(1.05);
+    }
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 6px;
+      text-align: center;
+      min-height: 40px;
+    }
+    .product-info {
+      font-size: 0.97rem;
+      color: #444;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .product-price {
+      font-size: 1.1rem;
+      color: #007bff;
+      font-weight: 700;
+      margin: 8px 0 4px 0;
+    }
+    .product-year {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .action-link {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    .action-link:hover {
+      background-color: #218838;
+    }
+    .no-data {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 40px 0;
+      width: 100%;
+    }
+    .back-button {
+      text-align: center;
+      margin: 40px 0;
+    }
+    .back-button a {
+      display: inline-block;
+      background-color: #2a2a72;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+    .back-button a:hover {
+      background-color: #1d1d5b;
+    }
+    /* Modal (Lightbox) Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: auto;
+      padding-top: 60px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 80%;
+      margin: auto;
+    }
+    .modal img {
+      width: 100%;
+      height: auto;
+    }
+    .close {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      transition: 0.3s;
+    }
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    @media (max-width: 900px) {
+      .product-grid { gap: 18px; }
+      .product-card { width: 90vw; max-width: 320px; }
+    }
+    @media (max-width: 600px) {
+      h3 { font-size: 2rem; }
+      .product-card { width: 98vw; max-width: 98vw; }
+      .product-grid { gap: 10px; }
+    }
+  </style>
+{% extends "userheader.html" %}
+{% block content %}
+  <h3>
+    <span style="color:#007bff; font-size:2.8rem; vertical-align:middle;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="vertical-align:middle; margin-right:10px;">
+        <circle cx="12" cy="12" r="10" stroke="#2a2a72" stroke-width="2" fill="#e6ecf3"/>
+        <path d="M7 13l3 3 7-7" stroke="#28a745" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span style="background: linear-gradient(90deg, #2a2a72 40%, #007bff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+      Parts Details
+    </span>
+    <span style="font-size:1.2rem; color:#555; display:block; margin-top:8px; font-weight:400; letter-spacing:0.5px;">
+      Discover the perfect part for your vehicle!
+    </span>
+  </h3>
+
+  <div class="product-grid">
+    {% for ppart in part %}
+    <div class="product-card">
+      <img src="{{ ppart.part_image.url }}" alt="{{ ppart.part_name }} Image" class="product-image clickable-img" data-src="{{ ppart.part_image.url }}" />
+      <div class="product-name">{{ ppart.part_name }}</div>
+      <div class="product-info"><strong>Part Number:</strong> {{ ppart.part_number }}</div>
+      <div class="product-info"><strong>Company:</strong> {{ ppart.company }}</div>
+      <div class="product-info"><strong>Vehicle Model:</strong> {{ ppart.vehicle_model }}</div>
+      <div class="product-price">₹{{ ppart.part_price }}</div>
+      <div class="product-year"><strong>Year:</strong> {{ ppart.part_year }}</div>
+      <a href="{% url 'orderforparts' ppart.id %}" class="action-link">Add to Cart</a>
+    </div>
+    {% empty %}
+    <div class="no-data">No parts found</div>
+    {% endfor %}
+  </div>
+
+  
+
+  <!-- Modal for large image view -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="Large Part Image">
+    </div>
+  </div>
+
+  <script>
+    // Get the modal
+    var modal = document.getElementById("imageModal");
+    // Get the image and insert it inside the modal
+    var imgs = document.querySelectorAll(".clickable-img");
+    var modalImg = document.getElementById("modalImage");
+    imgs.forEach(function(img) {
+      img.addEventListener("click", function() {
+        modal.style.display = "flex";
+        modalImg.src = this.dataset.src;
+      });
+    });
+    // Close the modal
+    function closeModal() {
+      modal.style.display = "none";
+    }
+  </script>
+
+<!-- </body>
+</html> -->
+{% endblock %}

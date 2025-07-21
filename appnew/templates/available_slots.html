@@ -1,0 +1,144 @@
+{% extends "userheader.html" %}
+{% block content %}
+
+     <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 36px 28px 28px 28px;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+        }
+        .messages {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 14px 10px;
+            background: #f8f9fa;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+        th {
+            background: #007bff;
+            color: #fff;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.08rem;
+            letter-spacing: 0.5px;
+        }
+        tr {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 8px;
+        }
+        tr:nth-child(even) td {
+            background: #e9f2fb;
+        }
+        .btn-book, .btn-book[disabled], .btn-book.disabled {
+            display: inline-block;
+            color: #fff;
+            background: #28a745;
+            padding: 8px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+        }
+        .btn-book:hover:not([disabled]):not(.disabled) {
+            background: #218838;
+        }
+        .btn-book[disabled], .btn-book.disabled {
+            background: #bdbdbd !important;
+            color: #eee !important;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 28px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            border-radius: 5px;
+            padding: 8px 18px;
+            background: #f1f8ff;
+            transition: background 0.2s;
+        }
+        .back-link:hover {
+            background: #e2eefd;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 16px 4px; }
+            th, td { font-size: 0.97rem; padding: 10px 4px; }
+            .btn-book, .back-link { font-size: 0.97rem; padding: 7px 10px; }
+        }
+    </style>
+    <div class="container">
+        <h2>Available Slots for Video Conferencing</h2>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <table>
+            <tr>
+                <th>Expert</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Action</th>
+            </tr>
+            {% for slot in slots %}
+            <tr>
+                <td>{{ slot.expert.name }}</td>
+                <td>{{ slot.date }}</td>
+                <td>{{ slot.start_time|time:"H:i" }}</td>
+                <td>{{ slot.end_time|time:"H:i" }}</td>
+                <td>
+                    {% if slot.date >= today %}
+                        <a class="btn-book" href="{% url 'book_slot' slot.id %}">Book</a>
+                    {% else %}
+                        <span class="btn-book disabled">Book</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center; color:#888; font-style:italic;">No available slots at the moment.</td>
+            </tr>
+            {% endfor %}
+        </table>
+       
+    </div>
+<!-- </body>
+</html> -->
+{% endblock %}

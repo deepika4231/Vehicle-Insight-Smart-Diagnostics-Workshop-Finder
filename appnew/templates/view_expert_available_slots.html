@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Available Slots for {{ expert.name }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      margin: 0;
+      padding: 20px;
+      color: #2d2d2d;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      padding: 25px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #fff; 
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-book {
+      display: inline-block;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .btn-book:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-back {
+      display: block;
+      width: fit-content;
+      margin: 30px auto 0;
+      background: #6c757d;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-back:hover {
+      background: #5a6268;
+    }
+
+    @media screen and (max-width: 768px) {
+      table, th, td {
+        font-size: 0.85rem;
+      }
+
+      .btn-book, .btn-back {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Available Slots for {{ expert.name }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for slot in slots %}
+        <tr>
+          <td>{{ slot.date }}</td>
+          <td>{{ slot.start_time }}</td>
+          <td>{{ slot.end_time }}</td>
+          <td>
+            <a class="btn-book" href="{% url 'book_slot' slot.id %}">Book</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">No available slots for this expert.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'userpage' %}" class="btn-back">Back to User Dashboard</a>
+  </div>
+
+</body>
+</html>

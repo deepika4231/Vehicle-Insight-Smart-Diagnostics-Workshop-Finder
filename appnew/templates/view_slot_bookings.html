@@ -1,0 +1,256 @@
+{% extends 'expertheader.html' %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+<style>
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    color: #333;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  h3 {
+    text-align: center;
+    font-size: 2.7rem;
+    font-weight: 800;
+    color: #5f2c82;
+    margin-bottom: 30px;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 12px #d1c4e9;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.95);
+    border-radius: 22px;
+    padding: 40px 30px 30px 30px;
+    box-shadow: 0 10px 40px 0 rgba(95,44,130,0.13), 0 2px 4px rgba(102,126,234,0.08);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+  .container:before {
+    content: "";
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, #667eea 0%, #764ba2 80%);
+    opacity: 0.13;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .messages {
+    background: linear-gradient(90deg, #d4edda 60%, #b2f7ef 100%);
+    color: #155724;
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(40,167,69,0.08);
+  }
+  .appointment-header {
+    text-align: center;
+    margin-bottom: 25px;
+    z-index: 1;
+    position: relative;
+  }
+  .appointment-header span.title {
+    font-size: 1.4rem;
+    color: #764ba2;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-shadow: 0 1px 6px #e0eafc;
+  }
+  .appointment-header .subtitle {
+    margin-top: 12px;
+    display: inline-block;
+    background: linear-gradient(90deg,#667eea,#764ba2);
+    color: #fff;
+    padding: 8px 22px;
+    border-radius: 22px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.12);
+    letter-spacing: 0.5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 24px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.13);
+    z-index: 1;
+    position: relative;
+  }
+  th, td {
+    padding: 20px 18px;
+    text-align: left;
+    position: relative;
+    z-index: 1;
+  }
+  th {
+    background: linear-gradient(90deg, #667eea 80%, #764ba2 100%);
+    color: #fff;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border-bottom: 3px solid #e0eafc;
+  }
+  tr {
+    transition: background 0.3s;
+  }
+  tr:nth-child(even) {
+    background: rgba(118,75,162,0.07);
+  }
+  tr:hover {
+    background: rgba(102,126,234,0.09);
+    box-shadow: 0 2px 12px #e0eafc;
+  }
+  .action-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .action-links a.btn-video-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 22px;
+    background: linear-gradient(90deg, #28a745 70%, #43e97b 100%);
+    color: #fff !important;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(40,167,69,0.13);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+  .action-links a.btn-video-call:hover {
+    background: linear-gradient(90deg, #218838 70%, #43e97b 100%);
+    transform: scale(1.07);
+    box-shadow: 0 4px 16px #43e97b33;
+  }
+  .action-links .btn-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 22px;
+    background: #bdbdbd;
+    color: #eee !important;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .action-links .icon {
+    font-size: 1.2em;
+    vertical-align: middle;
+  }
+  .btn-back {
+    display: block;
+    width: fit-content;
+    margin: 36px auto 0;
+    background: linear-gradient(90deg, #6c757d 70%, #b2b6bb 100%);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+    letter-spacing: 1px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-back:hover {
+    background: linear-gradient(90deg, #5a6268 70%, #b2b6bb 100%);
+    transform: scale(1.04);
+  }
+  @media screen and (max-width: 900px) {
+    .container { padding: 18px 6px; }
+    th, td { padding: 12px 6px; font-size: 0.97rem; }
+    h3 { font-size: 2rem; }
+  }
+  @media screen and (max-width: 600px) {
+    .container { padding: 8px 2px; }
+    table, th, td { font-size: 0.85rem; }
+    .action-links { flex-direction: column; gap: 6px; }
+    .btn-back { font-size: 1rem; padding: 10px 18px; }
+  }
+</style>
+
+<div class="container">
+  <h3>
+    <i class="fa-regular fa-calendar-check" style="color:#667eea;"></i>
+    Appointment Details
+  </h3>
+  <div class="appointment-header">
+    <span class="title">
+      <i class="fa-solid fa-clock" style="color:#764ba2;"></i>
+      Your Upcoming &amp; Past Slot Bookings
+    </span>
+    <div class="subtitle">
+      <i class="fa-solid fa-bell"></i>
+      Stay prepared for your appointments!
+    </div>
+  </div>
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <i class="fa-solid fa-circle-info"></i> {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <table>
+    <thead>
+      <tr>
+        <th><i class="fa-solid fa-user"></i> User Name</th>
+        <th><i class="fa-solid fa-calendar-day"></i> Date</th>
+        <th><i class="fa-solid fa-hourglass-start"></i> Start Time</th>
+        <th><i class="fa-solid fa-hourglass-end"></i> End Time</th>
+        <th><i class="fa-solid fa-clock-rotate-left"></i> Booked At</th>
+        <th><i class="fa-solid fa-video"></i> Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.user.name }}</td>
+          <td>{{ booking.slot.date }}</td>
+          <td>{{ booking.slot.start_time }}</td>
+          <td>{{ booking.slot.end_time }}</td>
+          <td>{{ booking.booked_at }}</td>
+          <td class="action-links">
+            {% if booking.slot.date == today and booking.slot.start_time <= now_time and now_time <= booking.slot.end_time %}
+
+
+              <a href="{% url 'video_call' booking.id %}" class="btn-video-call">
+              <span class="icon"><i class="fa-solid fa-video"></i></span> Video Call
+              </a>
+            {% else %}
+              <span class="btn-call"><span class="icon"><i class="fa-solid fa-video-slash"></i></span> Video Call</span>
+            {% endif %}
+    
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" style="text-align:center; color:#764ba2; font-weight:700;">
+            <i class="fa-regular fa-face-frown"></i> No bookings found.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+</div>
+{% endblock %}

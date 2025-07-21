@@ -1,0 +1,182 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>All Parts</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f9fb; margin: 0; }
+        .container { max-width: 1200px; margin: 40px auto; }
+        h2 { text-align: center; color: #007bff; margin-bottom: 30px; }
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            justify-content: center;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            padding: 18px 18px 22px 18px;
+            width: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+        }
+        .product-image {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: #f2f2f2;
+        }
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+            text-align: center;
+            min-height: 40px;
+        }
+        .product-info {
+            font-size: 0.97rem;
+            color: #444;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .product-price {
+            font-size: 1.1rem;
+            color: #007bff;
+            font-weight: 700;
+            margin: 8px 0 4px 0;
+        }
+        .product-stock {
+            font-size: 0.95rem;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .out-of-stock {
+            color: #dc3545;
+        }
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 40px 0;
+            font-style: italic;
+            width: 100%;
+        }
+        @media (max-width: 900px) {
+            .product-grid { gap: 18px; }
+            .product-card { width: 90vw; max-width: 320px; }
+        }
+    </style>
+</head>
+<body> -->
+
+{% extends "indexheader.html" %}
+{% block content %}
+<style>
+        body { font-family: Arial, sans-serif; background: #f7f9fb; margin: 0; }
+        .container { max-width: 1200px; margin: 40px auto; }
+        h2 { text-align: center; color: #007bff; margin-bottom: 30px; }
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            justify-content: center;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            padding: 18px 18px 22px 18px;
+            width: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+        }
+        .product-image {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: #f2f2f2;
+        }
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+            text-align: center;
+            min-height: 40px;
+        }
+        .product-info {
+            font-size: 0.97rem;
+            color: #444;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .product-price {
+            font-size: 1.1rem;
+            color: #007bff;
+            font-weight: 700;
+            margin: 8px 0 4px 0;
+        }
+        .product-stock {
+            font-size: 0.95rem;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .out-of-stock {
+            color: #dc3545;
+        }
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 40px 0;
+            font-style: italic;
+            width: 100%;
+        }
+        @media (max-width: 900px) {
+            .product-grid { gap: 18px; }
+            .product-card { width: 90vw; max-width: 320px; }
+        }
+    </style>
+    <div class="container">
+        <h2>All Parts</h2>
+        <div class="product-grid">
+            {% for part in parts_list %}
+            <div class="product-card">
+                <img src="{{ part.part_image.url }}" alt="{{ part.part_name }}" class="product-image">
+                <div class="product-name">{{ part.part_name }}</div>
+                <div class="product-info"><strong>Company:</strong> {{ part.company }}</div>
+                <div class="product-info"><strong>Model:</strong> {{ part.vehicle_model }}</div>
+                <div class="product-info"><strong>Year:</strong> {{ part.part_year }}</div>
+                <div class="product-price">₹{{ part.part_price }}</div>
+                {% if part.stock > 0 %}
+                    <div class="product-stock">In Stock: {{ part.stock }}</div>
+                {% else %}
+                    <div class="product-stock out-of-stock">Out of Stock</div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="no-data">No parts found.</div>
+            {% endfor %}
+        </div>
+    </div>
+<!-- </body>
+</html> -->
+{% endblock %}

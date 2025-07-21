@@ -1,0 +1,681 @@
+{% load static %}
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+html, body {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  place-items: center;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  background: url("{% static 'user/images/background/1.jpg' %}") no-repeat center center fixed;
+  background-size: cover;
+  overflow-y: auto;
+}
+::selection {
+  background: #1a75ff;
+  color: #fff;
+}
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.5);
+  z-index: 0;
+}
+.content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper {
+  overflow-y: auto;   
+  overflow-x: hidden;         /* Enables vertical scroll */
+  max-height: 90vh;            /* Limits height to 90% of viewport */
+  max-width: 390px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.wrapper .title-text {
+  display: flex;
+  width: 200%;
+}
+.wrapper .title {
+  width: 50%;
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+.wrapper .slide-controls {
+  position: relative;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
+  margin: 30px 0 10px 0;
+  justify-content: space-between;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+}
+.slide-controls .slide {
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 48px;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.6s ease;
+}
+.slide-controls label.signup {
+  color: #000;
+}
+.slide-controls .slider-tab {
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  left: 0;
+  z-index: 0;
+  border-radius: 15px;
+  background: -webkit-linear-gradient(left,#003366,#004080,#0059b3, #0073e6);
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+input[type="radio"] {
+  display: none;
+}
+#signup:checked ~ .slider-tab {
+  left: 50%;
+}
+#signup:checked ~ label.signup {
+  color: #fff;
+  cursor: default;
+  user-select: none;
+}
+#signup:checked ~ label.login {
+  color: #000;
+}
+#login:checked ~ label.signup {
+  color: #000;
+}
+#login:checked ~ label.login {
+  cursor: default;
+  user-select: none;
+}
+.wrapper .form-container {
+  width: 100%;
+  overflow: hidden;
+}
+.form-container .form-inner {
+  display: flex;
+  width: 200%;
+}
+.form-container .form-inner form {
+  width: 50%;
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+.form-inner form .field {
+  height: 50px;
+  width: 100%;
+  margin-top: 20px;
+}
+.form-inner form .field input, .form-inner form .field select {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  padding-left: 15px;
+  border-radius: 15px;
+  border: 1px solid lightgrey;
+  border-bottom-width: 2px;
+  font-size: 17px;
+  transition: all 0.3s ease;
+}
+.form-inner form .field input:focus {
+  border-color: #1a75ff;
+}
+.form-inner form .field input::placeholder {
+  color: #999;
+  transition: all 0.3s ease;
+}
+form .field input:focus::placeholder {
+  color: #1a75ff;
+}
+.form-inner form .pass-link {
+  margin-top: 50px;
+}
+.form-inner form .signup-link {
+  text-align: center;
+  margin-top: 30px;
+}
+.form-inner form .pass-link a,
+.form-inner form .signup-link a {
+  color: #1a75ff;
+  text-decoration: none;
+}
+.form-inner form .pass-link a:hover,
+.form-inner form .signup-link a:hover {
+  text-decoration: underline;
+}
+form .btn {
+  height: 50px;
+  width: 100%;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+form .btn .btn-layer {
+  height: 100%;
+  width: 300%;
+  position: absolute;
+  left: -100%;
+  background: -webkit-linear-gradient(right,#003366,#004080,#0059b3, #0073e6);
+  border-radius: 15px;
+  transition: all 0.4s ease;
+}
+form .btn:hover .btn-layer {
+  left: 0;
+}
+form .btn input[type="submit"] {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  background: none;
+  border: none;
+  color: #fff;
+  padding-left: 0;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.fancy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+  transition: all 0.4s ease;
+}
+.fancy-btn:hover {
+  background: linear-gradient(90deg, #003366, #004080, #0059b3, #0073e6);
+  color: #fff;
+}
+.fancy-btn .btn-text {
+  margin-right: 10px;
+}
+.fancy-btn .btn-icon {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+.fancy-btn:hover .btn-icon {
+  transform: translateX(5px);
+}
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: block;
+  padding: 14px 15px;
+  background: #f5f5f5;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  font-size: 17px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-label:hover {
+  border-color: #1a75ff;
+  color: #1a75ff;
+}
+
+</style>
+<title>Login Page</title>
+</head>
+<body>
+ 
+<div class="overlay">
+  <div class="content">
+    <div class="wrapper">
+      <div class="title-text">
+        <div class="title login">Login Form</div>
+        <div class="title signup">Signup Form</div>
+      </div>
+      <div class="form-container">
+        <div class="slide-controls">
+          <input type="radio" name="slide" id="login" checked>
+          <input type="radio" name="slide" id="signup">
+          <label for="login" class="slide login">Login</label>
+          <label for="signup" class="slide signup">Signup</label>
+          <div class="slider-tab"></div>
+        </div>
+        <div class="form-inner">
+          <!-- Login Form -->
+          <form method="post" class="login">
+            {% csrf_token %}
+            <div class="field"><br>
+              <input type="email" name="email" placeholder="email" >
+            </div>
+            <div class="field"><br>
+              <input type="password" name="password" placeholder="password" >
+            </div>
+            <div class="pass-link"></div>
+               <div class="field btn">
+              <div class="btn-layer"></div>
+              <button type="submit" class="fancy-btn">
+                <span class="btn-text">Login</span>
+                <span class="btn-icon">🚀</span>
+              </button>
+            </div>
+            <div class="pass-link" style="margin-top: 10px; margin-bottom: 0; text-align: center;">
+              <a href="forgot_password">Forgot password?</a>
+            </div>
+              {% if messages %}
+              {% for message in messages %}
+                <div class="alert" style="color: red; margin-top: 8px;">{{ message }}</div>
+              {% endfor %}
+              {% endif %}
+         
+            <div class="signup-link">Create an account <a href="">Signup now</a></div>
+          </form>
+
+          <!-- Signup Form -->
+          <form method="post" action="{% url 'signup' %}" class="signup" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <!-- Role Selection -->
+  <div class="field">
+    <select id="signupRole" name="user_type" required onchange="toggleFields()">
+      <option value="">Select Role</option>
+      <option value="expert">Expert</option>
+      <option value="workshop">Workshop</option>
+      <option value="user">User</option>
+    </select>
+  </div>
+
+  <!-- Common Hidden Fields -->
+  <input type="hidden" name="email" id="commonEmail">
+  <input type="hidden" name="password" id="commonPassword">
+  <input type="hidden" name="contact" id="commonContact">
+
+  <!-- Expert Fields -->
+  <div id="expertFields" style="display: none;">
+    <div class="field">
+      <input type="text" name="expert_name" id="name" placeholder="Name">
+    </div>
+    <div class="field">
+  <label for="experience_certificate" class="file-label" id="file-placeholder">Upload Experience Certificate</label>
+  <input type="file" name="experience_certificate" id="experience_certificate" class="file-input">
+</div>
+
+    <div class="field">
+      <input type="text" name="e_experience" id="experience" placeholder="Experience (years)">
+    </div>
+    <div class="field">
+      <input type="text" name="expert_contact" id="expertContact" placeholder="Phone Number" maxlength="10" pattern="\d{10}">
+    </div>
+    <div class="field">
+      <input type="text" name="expert_email" id="expertEmail" placeholder="Email">
+    </div>
+    <div class="field">
+      <input type="password" name="expert_password" id="expertPassword" placeholder="Password">
+    </div>
+  </div>
+
+  <!-- Workshop Fields -->
+  <div id="workshopFields" style="display: none;">
+    <div class="field">
+      <input type="text" name="workshop_name" id="workshopname" placeholder="Workshop Name">
+    </div>
+     <div class="field">
+      <input type="text" name="workshop_BRN" id="BRN" placeholder="Business Registration Number (BRN)">
+     </div>
+    
+    <div class="field">
+      <input type="text" name="w_address" id="workshopAddress" placeholder="Address">
+    </div>
+    <div class="field">
+      <input type="text" name="w_district" id="district" placeholder="District">
+    </div>
+    <div class="field">
+      <input type="text" name="w_city" id="city" placeholder="City">
+    </div>
+    <div class="field">
+      <input type="text" name="workshop_contact" id="workshopContact" placeholder="Workshop Contact No" maxlength="10" pattern="\d{10}">
+    </div>
+     <button type="button" onclick="getLocation()">📍 Get Location</button>
+
+  <!-- Map Display -->
+  <div id="map" style="height: 100px; margin-top: 15px; border-radius: 10px;"></div>
+    <div class="field">
+      <input type="number" name="w_latitude" id="latitude" placeholder="Workshop Latitude" step="any" min="-90" max="90">
+    </div>
+    <div class="field">
+      <input type="number" name="w_longitude" id="longitude" placeholder="Workshop Longitude" step="any" min="-180" max="180">
+    </div>
+  
+
+    <div class="field">
+      <input type="text" name="workshop_email" id="workshopEmail" placeholder="Email">
+    </div>
+    <div class="field">
+      <input type="password" name="workshop_password" id="workshopPassword" placeholder="Password">
+    </div>
+  </div>
+
+  <!-- User Fields -->
+  <div id="userFields" style="display: none;">
+    <div class="field">
+      <input type="text" name="user_name" id="userName" placeholder="Name">
+    </div>
+    <div class="field">
+      <input type="text" name="user_contact" id="userContact" placeholder="Contact Number" maxlength="10" pattern="\d{10}">
+    </div>
+    <div class="field">
+      <input type="text" name="user_address" id="userAddress" placeholder="Address">
+    </div>
+    <div class="field">
+      <input type="text" name="user_email" id="userEmail" placeholder="Email">
+    </div>
+    <div class="field">
+      <input type="password" name="user_password" id="userPassword" placeholder="Password">
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+   <br>
+  <div class="field btn">
+    <div class="btn-layer"></div>
+    <input type="submit" value="Signup">
+  </div>
+
+  <div class="signup-link">Already have an account? <a href="../userlogin">Login</a></div>
+</form>
+
+<!-- JavaScript to show/hide fields and copy data to hidden fields -->
+<script>
+  function toggleFields() {
+    const role = document.getElementById("signupRole").value;
+    document.getElementById("expertFields").style.display = (role === "expert") ? "block" : "none";
+    document.getElementById("workshopFields").style.display = (role === "workshop") ? "block" : "none";
+    document.getElementById("userFields").style.display = (role === "user") ? "block" : "none";
+  }
+
+  document.querySelector("form.signup").addEventListener("submit", function (e) {
+    const role = document.getElementById("signupRole").value;
+    if (role === "expert") {
+      document.getElementById("commonEmail").value = document.getElementById("expertEmail").value;
+      document.getElementById("commonPassword").value = document.getElementById("expertPassword").value;
+      document.getElementById("commonContact").value = document.getElementById("expertContact").value;
+    } else if (role === "workshop") {
+      document.getElementById("commonEmail").value = document.getElementById("workshopEmail").value;
+      document.getElementById("commonPassword").value = document.getElementById("workshopPassword").value;
+      document.getElementById("commonContact").value = document.getElementById("workshopContact").value;
+    } else if (role === "user") {
+      document.getElementById("commonEmail").value = document.getElementById("userEmail").value;
+      document.getElementById("commonPassword").value = document.getElementById("userPassword").value;
+      document.getElementById("commonContact").value = document.getElementById("userContact").value;
+    }
+  });
+</script>
+
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const loginText = document.querySelector(".title-text .login");
+const loginForm = document.querySelector("form.login");
+const loginBtn = document.querySelector("label.login");
+const signupBtn = document.querySelector("label.signup");
+const signupLink = document.querySelector("form .signup-link a");
+
+signupBtn.onclick = () => {
+  loginForm.style.marginLeft = "-50%";
+  loginText.style.marginLeft = "-50%";
+};
+
+loginBtn.onclick = () => {
+  loginForm.style.marginLeft = "0%";
+  loginText.style.marginLeft = "0%";
+};
+
+signupLink.onclick = () => {
+  signupBtn.click();
+  return false;
+};
+
+document.getElementById("signupRole").addEventListener("change", function () {
+  const role = this.value;
+  document.getElementById("expertFields").style.display = role === "expert" ? "block" : "none";
+  document.getElementById("workshopFields").style.display = role === "workshop" ? "block" : "none";
+  document.getElementById("userFields").style.display = role === "user" ? "block" : "none";
+});
+</script>
+
+
+<script>
+  let map, marker;
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lng;
+
+        if (!map) {
+          map = L.map('map').setView([lat, lng], 16);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(map);
+
+          marker = L.marker([lat, lng]).addTo(map)
+                   .bindPopup("Workshop Location").openPopup();
+        } else {
+          map.setView([lat, lng], 16);
+          marker.setLatLng([lat, lng]);
+        }
+
+      }, () => {
+        alert("Geolocation failed. Please allow location access.");
+      });
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  }
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const validators = [];
+
+  function addValidation(input, pattern, validMsg, invalidMsg, isRequired = true) {
+    const feedback = document.createElement("small");
+    feedback.style.display = "block";
+    input.parentNode.appendChild(feedback);
+
+    const validate = () => {
+      const value = input.value.trim();
+      if (isRequired && !value) {
+        feedback.textContent = "❌ Required field";
+        feedback.style.color = "red";
+        return false;
+      } else if (pattern && value && !pattern.test(value)) {
+        feedback.textContent = "❌ " + invalidMsg;
+        feedback.style.color = "red";
+        return false;
+      } else {
+        feedback.textContent = value ? "✅ " + validMsg : "";
+        feedback.style.color = "green";
+        return true;
+      }
+    };
+
+    input.addEventListener("input", validate);
+    validators.push(validate);
+  }
+
+  function validateFileInput(input) {
+    const feedback = document.createElement("small");
+    feedback.style.display = "block";
+    input.parentNode.appendChild(feedback);
+
+    const validate = () => {
+      const file = input.files[0];
+      if (!file) {
+        feedback.textContent = "❌ File is required";
+        feedback.style.color = "red";
+        return false;
+      }
+
+      const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        feedback.textContent = "❌ Invalid file type (PDF/JPG/PNG allowed)";
+        feedback.style.color = "red";
+        return false;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        feedback.textContent = "❌ File too large (max 5MB)";
+        feedback.style.color = "red";
+        return false;
+      }
+
+      feedback.textContent = "✅ File is valid";
+      feedback.style.color = "green";
+      return true;
+    };
+
+    input.addEventListener("change", validate);
+    validators.push(validate);
+  }
+
+ 
+  const nameInput = document.querySelector('input[name$="name"]');
+  const experienceInput = document.querySelector('input[name$="experience"]');
+  const certInput = document.querySelector('input[name$="experience_certificate"]');
+
+  if (nameInput) {
+    addValidation(nameInput, /^[A-Za-z\s]{2,}$/, "Valid name", "Only letters and spaces");
+  }
+
+
+  if (experienceInput) {
+    addValidation(experienceInput, /^\d+$/, "Valid experience", "Must be a number");
+  }
+
+  if (certInput) {
+    validateFileInput(certInput);
+  }
+
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function (e) {
+    let isValid = true;
+    validators.forEach(validate => {
+      if (!validate()) isValid = false;
+    });
+
+  });
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const validators = [];
+
+    function addValidation(input, pattern, validMsg, invalidMsg, isRequired = true) {
+      const feedback = document.createElement("small");
+      feedback.style.display = "block";
+      input.parentNode.appendChild(feedback);
+
+      const validate = () => {
+        const value = input.value.trim();
+        if (isRequired && !value) {
+          feedback.textContent = "❌ Required field";
+          feedback.style.color = "red";
+          return false;
+        } else if (pattern && value && !pattern.test(value)) {
+          feedback.textContent = invalidMsg;
+          feedback.style.color = "red";
+          return false;
+        } else {
+          feedback.textContent = validMsg;
+          feedback.style.color = "green";
+          return true;
+        }
+      };
+
+      input.addEventListener("input", validate);
+      validators.push(validate);
+    }
+
+    // Add validations for each field
+    addValidation(document.getElementById("expertEmail"), /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "✅ Valid email", "❌ Invalid email");
+    addValidation(document.getElementById("workshopEmail"), /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "✅ Valid email", "❌ Invalid email");
+    addValidation(document.getElementById("userEmail"), /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "✅ Valid email", "❌ Invalid email");
+
+    addValidation(document.getElementById("expertContact"), /^\d{10}$/, "✅ Valid number", "❌ Must be 10 digits");
+    addValidation(document.getElementById("workshopContact"), /^\d{10}$/, "✅ Valid number", "❌ Must be 10 digits");
+    addValidation(document.getElementById("userContact"), /^\d{10}$/, "✅ Valid number", "❌ Must be 10 digits");
+
+    addValidation(document.getElementById("expertPassword"), /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, "✅ Good", "❌ Minimum 8 characters with uppercase, lowercase, number & special character");
+    addValidation(document.getElementById("workshopPassword"), /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, "✅ Good", "❌ Minimum 8 characters with uppercase, lowercase, number & special character");
+    addValidation(document.getElementById("userPassword"), /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, "✅ Good", "❌ Minimum 8 characters with uppercase, lowercase, number & special character");
+    
+    addValidation(document.getElementById("workshopAddress"), /^[\w\s,.-]{5,}$/, "✅ Valid address", "❌ Address must be at least 5 characters long");
+    addValidation(document.getElementById("workshopname"), /^[A-Za-z\s]{2,}$/, "✅ Valid workshop name", "❌ Only letters and spaces");
+    addValidation(document.getElementById("BRN"), /^[A-Za-z0-9]{5,}$/, "✅ Valid BRN", "❌ BRN must be at least 5 characters long");
+    addValidation(document.getElementById("district"), /^[A-Za-z\s]{2,}$/, "✅ Valid district", "❌ Only letters and spaces");
+    addValidation(document.getElementById("city"), /^[A-Za-z\s]{2,}$/, "✅ Valid city", "❌ Only letters and spaces");
+    addValidation(document.getElementById("latitude"), /^-?\d+(\.\d+)?$/, "✅ Valid latitude", "❌ Latitude must be a valid number");
+    addValidation(document.getElementById("longitude"), /^-?\d+(\.\d+)?$/, "✅ Valid longitude", "❌ Longitude must be a valid number");
+    addValidation(document.getElementById("userName"), /^[A-Za-z\s]{2,}$/, "✅ Valid name", "❌ Only letters and spaces");
+    addValidation(document.getElementById("userAddress"), /^[\w\s,.-]{5,}$/, "✅ Valid address", "❌ Address must be at least 5 characters long");
+    // More validations can be added as needed
+
+    document.querySelector("form.signup").addEventListener("submit", function (e) {
+      let valid = true;
+      validators.forEach(v => { if (!v()) valid = false; });
+    
+    });
+  });
+</script>
+</body>
+</html>

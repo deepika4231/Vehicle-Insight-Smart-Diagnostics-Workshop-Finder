@@ -1,0 +1,153 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f7f9fb;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 450px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 30px 35px 25px 35px;
+    }
+    h2 {
+        text-align: center;
+        color: #007bff;
+        margin-bottom: 25px;
+    }
+    form {
+        margin-top: 10px;
+    }
+    label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        color: #333;
+    }
+    select, textarea, input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 6px;
+        border: 1.5px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+    textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+    .feedback-msg {
+        font-size: 0.85rem;
+        color: red;
+        margin-bottom: 12px;
+    }
+    button[type="submit"] {
+        width: 100%;
+        background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+        color: #fff;
+        border: none;
+        padding: 12px 0;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    button[type="submit"]:hover {
+        background: linear-gradient(90deg, #0056b3 60%, #00aaff 100%);
+    }
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 18px;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    .messages {
+        margin-bottom: 15px;
+        color: #28a745;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <h2>
+        {% if form.instance.pk %}
+            Edit Your Review for {{ workshop.workshopname }}
+        {% else %}
+            Add Review for {{ workshop.workshopname }}
+        {% endif %}
+    </h2>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" id="reviewForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="feedback-msg" id="rating-feedback"></div>
+        <div class="feedback-msg" id="comment-feedback"></div>
+
+        <button type="submit">
+            {% if form.instance.pk %}Update Review{% else %}Submit Review{% endif %}
+        </button>
+    </form>
+
+    <a class="back-link" href="{% url 'workshopdetailpage' %}">← Back to Workshops</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('reviewForm');
+    const rating = document.getElementById('id_rating');
+    const comment = document.getElementById('id_comment');
+    const ratingFeedback = document.getElementById('rating-feedback');
+    const commentFeedback = document.getElementById('comment-feedback');
+
+    function validateRating() {
+        if (!rating.value || parseInt(rating.value) < 1 || parseInt(rating.value) > 5) {
+            ratingFeedback.textContent = '❌ Please select a rating between 1 and 5.';
+            return false;
+        }
+        ratingFeedback.textContent = '';
+        return true;
+    }
+
+    function validateComment() {
+        if (!comment.value.trim() || comment.value.length < 10) {
+            commentFeedback.textContent = '❌ Comment should be at least 10 characters long.';
+            return false;
+        }
+        commentFeedback.textContent = '';
+        return true;
+    }
+
+    form.addEventListener('submit', function (e) {
+        const validRating = validateRating();
+        const validComment = validateComment();
+        if (!validRating || !validComment) {
+            e.preventDefault();
+            alert('❌ Please correct the errors in the form.');
+        }
+    });
+
+    // Real-time feedback
+    if (rating) rating.addEventListener('change', validateRating);
+    if (comment) comment.addEventListener('input', validateComment);
+});
+</script>
+{% endblock %}

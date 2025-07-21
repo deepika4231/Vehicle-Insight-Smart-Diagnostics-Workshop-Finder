@@ -1,0 +1,391 @@
+{% extends "userheader.html" %}
+{% block content %}
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #e0f0ff, #ffffff);
+    color: #2c3e50;
+    min-height: 100vh;
+  }
+
+  h3 {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: #0d6efd; /* Bootstrap primary blue */
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Search bar container */
+  .form-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem auto 3rem;
+    max-width: 540px;
+    padding: 0 1rem;
+  }
+
+  .search-bar {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .search-bar input[type="text"] {
+    flex-grow: 1;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border: 2px solid #0d6efd;
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+    outline-offset: 2px;
+  }
+  .search-bar input[type="text"]:focus {
+    border-color: #0645ad;
+  }
+
+  .search-bar button {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 10px rgba(13,110,253,0.3);
+    transition: background-color 0.3s ease, transform 0.15s ease;
+  }
+  .search-bar button:hover {
+    background-color: #0645ad;
+    transform: translateY(-2px);
+  }
+
+  /* Workshop Table */
+  table {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto 4rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(13,110,253,0.15);
+    background: white;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  thead {
+    background-color: #0d6efd;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  th, td {
+    padding: 18px 22px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  tbody tr:hover {
+    background-color: #dbe9ff;
+    transition: background-color 0.25s ease;
+  }
+
+  /* Action buttons */
+  button.table-btn {
+    background: #198754; /* Bootstrap success */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(25,135,84,0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  button.table-btn:hover {
+    background-color: #145c32;
+    transform: translateY(-2px);
+  }
+  button.table-btn a {
+    color: white;
+    text-decoration: none;
+  }
+
+  a.review-link {
+    background-color: #0d6efd;
+    color: white;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 12px;
+    box-shadow: 0 3px 7px rgba(13,110,253,0.4);
+    transition: background-color 0.3s ease, transform 0.15s ease;
+  }
+  a.review-link:hover {
+    background-color: #0645ad;
+    transform: translateY(-1.5px);
+  }
+
+  /* No data message */
+  .no-data {
+    text-align: center;
+    padding: 3rem 0;
+    color: #6c757d;
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+
+  /* Back button */
+  .back-button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+  .back-button button {
+    background-color: #6c757d;
+    color: white;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(108,117,125,0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .back-button button:hover {
+    background-color: #495057;
+    transform: translateY(-2px);
+  }
+  .back-button button a {
+    color: white;
+    text-decoration: none;
+  }
+
+  /* Fade in animation */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    h3 {
+      font-size: 2rem;
+      margin-top: 1.5rem;
+    }
+    table, thead, tbody, th, td, tr {
+      font-size: 0.9rem;
+    }
+    .search-bar {
+      flex-direction: column;
+      gap: 14px;
+    }
+    .search-bar input, .search-bar button {
+      width: 100%;
+    }
+    .back-button button {
+      width: 90%;
+    }
+  }
+
+  
+  .leaflet-container {
+    font-family: inherit;
+    z-index: 0;
+  }
+
+  
+  .modal-map {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content-map {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    position: relative;
+  }
+
+  .modal-map-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+  }
+
+  #bigMap {
+    height: 450px;
+    width: 100%;
+    border-radius: 10px;
+  }
+
+
+</style>
+
+<h3>Workshop Details</h3>
+
+<div class="form-container">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="search-bar">
+      <input type="text" name="search" placeholder="Search Workshops..." required autocomplete="off" />
+      <button type="submit">Search</button>
+    </div>
+  </form>
+</div>
+
+<table role="table" aria-label="Workshop details table">
+  <thead>
+    <tr>
+      <th scope="col">Workshop Name</th>
+      <th scope="col">Address</th>
+      <th scope="col">District</th>
+      <th scope="col">City</th>
+      <th scope="col">Contact No</th>
+      <th scope="col">Email</th>
+      <th scope="col">Rating</th>
+      <th scope="col">Location</th>
+
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in workshops %}
+    <tr>
+      <td>{{ user.workshopname }}</td>
+      <td>{{ user.adress }}</td>
+      <td>{{ user.district }}</td>
+      <td>{{ user.city }}</td>
+      <td>{{ user.wcontactno }}</td>
+      <td>{{ user.workshopid.email }}</td>
+      <td>
+        {% if user.average_rating %}
+          {{ user.average_rating }} ★
+        {% else %}
+          No ratings yet
+        {% endif %}
+      </td>
+
+    <td>
+  {% if user.latitude and user.longitude %}
+    <div id="map-{{ user.id }}" onclick="showMapModal({{ user.latitude }}, {{ user.longitude }}, '{{ user.workshopname }}')" style="height: 150px; width: 200px; border-radius: 8px; cursor: pointer;"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var smallMap = L.map('map-{{ user.id }}').setView([{{ user.latitude }}, {{ user.longitude }}], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(smallMap);
+        L.marker([{{ user.latitude }}, {{ user.longitude }}]).addTo(smallMap)
+          .bindPopup("{{ user.workshopname }}");
+      });
+    </script>
+  {% else %}
+    <span style="color:#999;">No location</span>
+  {% endif %}
+</td>
+
+
+      <td>
+        <button class="table-btn">
+          <a href="{% url 'workshop_slots' user.id %}">View Slots</a>
+        </button>
+        <a href="{% url 'workshopreview' user.id %}" class="review-link" aria-label="Review {{ user.workshopname }}">Review</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="8" class="no-data">No workshop found</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+<div class="modal-map" id="mapModal">
+  <div class="modal-content-map">
+    <span class="modal-map-close" onclick="closeMapModal()">&times;</span>
+    <div id="bigMap"></div>
+  </div>
+</div>
+
+<script>
+  let bigMap = null;
+
+  function showMapModal(lat, lon, name) {
+    const modal = document.getElementById("mapModal");
+    modal.style.display = "flex";
+
+    // Destroy previous map instance if exists
+    if (bigMap !== null) {
+      bigMap.remove();
+    }
+
+    // Create new big map
+    bigMap = L.map("bigMap").setView([lat, lon], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(bigMap);
+    L.marker([lat, lon]).addTo(bigMap).bindPopup(name).openPopup();
+  }
+
+  function closeMapModal() {
+    const modal = document.getElementById("mapModal");
+    modal.style.display = "none";
+    if (bigMap !== null) {
+      bigMap.remove();
+    }
+  }
+
+  // Close modal on outside click
+  window.addEventListener("click", function(event) {
+    const modal = document.getElementById("mapModal");
+    if (event.target === modal) {
+      closeMapModal();
+    }
+  });
+</script>
+
+
+{% endblock %}

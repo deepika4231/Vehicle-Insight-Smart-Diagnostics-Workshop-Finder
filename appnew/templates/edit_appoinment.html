@@ -1,0 +1,224 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  form label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  form input,
+  form select,
+  form textarea {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #333;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  form textarea {
+    resize: vertical;
+  }
+
+  form input:focus,
+  form select:focus,
+  form textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  }
+
+  button {
+    padding: 14px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 18px rgba(255, 126, 95, 0.4);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 25px;
+  }
+
+  .feedback-msg {
+    font-size: 0.85rem;
+    color: red;
+    margin-top: -10px;
+    margin-bottom: 5px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 25px 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    button {
+      font-size: 15px;
+    }
+  }
+</style>
+
+<div class="container">
+  <h1>Edit Appointment</h1>
+  <form method="post" id="appointmentForm">
+    {% csrf_token %}
+    {{ issue_form.as_p }}
+
+    <div class="mb-3">
+      <label for="slotid" class="form-label">Select Slot:</label>
+      <select id="slotid" name="slotid" class="form-select" required>
+        <option value="">Select a slot</option>
+        {% for slot in slots %}
+        <option value="{{ slot.id }}"
+          {% if slot.id == issue_form.instance.slot.id %}selected{% endif %}>
+          {{ slot.date }} - {{ slot.time|time:"H:i" }}
+        </option>
+        {% endfor %}
+      </select>
+      <small class="feedback-msg" id="slot-feedback"></small>
+    </div>
+
+    <button type="submit">Save Changes</button>
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('appointmentForm');
+
+  const fields = [
+    { id: 'id_vehiclectegory', name: 'Vehicle Category' },
+    { id: 'id_company', name: 'Company' },
+    { id: 'id_modelname', name: 'Model Name' },
+    { id: 'id_issue', name: 'Issue' }
+  ];
+
+  // Create feedback spans under fields
+  fields.forEach(field => {
+    const input = document.getElementById(field.id);
+    if (input && !document.getElementById(`${field.id}-feedback`)) {
+      const feedback = document.createElement('div');
+      feedback.className = 'feedback-msg';
+      feedback.id = `${field.id}-feedback`;
+      input.insertAdjacentElement('afterend', feedback);
+    }
+  });
+
+  const slotSelect = document.getElementById('slotid');
+  const slotFeedback = document.getElementById('slot-feedback');
+
+  function validateField(id, name) {
+    const input = document.getElementById(id);
+    const feedback = document.getElementById(`${id}-feedback`);
+    if (!input || !feedback) return true;
+
+    if (!input.value.trim()) {
+      feedback.textContent = `❌ ${name} is required`;
+      return false;
+    } else {
+      feedback.textContent = '';
+      return true;
+    }
+  }
+
+  function validateSlot() {
+    if (!slotSelect.value) {
+      slotFeedback.textContent = '❌ Please select a time slot';
+      return false;
+    } else {
+      slotFeedback.textContent = '';
+      return true;
+    }
+  }
+
+  form.addEventListener('submit', function (e) {
+    let valid = true;
+    fields.forEach(field => {
+      if (!validateField(field.id, field.name)) valid = false;
+    });
+
+    if (!validateSlot()) valid = false;
+
+    if (!valid) {
+      e.preventDefault();
+      alert('❌ Please fix the errors before submitting.');
+    }
+  });
+
+  // Live validation
+  fields.forEach(field => {
+    const input = document.getElementById(field.id);
+    if (input) {
+      input.addEventListener('input', () => validateField(field.id, field.name));
+    }
+  });
+
+  slotSelect.addEventListener('change', validateSlot);
+});
+</script>
+{% endblock %}

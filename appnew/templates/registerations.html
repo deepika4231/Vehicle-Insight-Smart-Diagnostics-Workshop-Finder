@@ -1,0 +1,255 @@
+{% extends "indexheader.html" %}
+{% block content %}
+<style>
+  :root {
+    --primary: #6366f1;
+    --accent: #ec4899;
+    --bg-light: #f9f9fb;
+    --text-dark: #1f2937;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    padding: 35px 30px;
+    max-width: 450px;
+    width: 100%;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(15px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  h2 {
+    text-align: center;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  form {
+    display: flex;
+
+    flex-direction: column;
+  }
+    .center-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
+    padding: 20px 0;
+  }
+
+  form p {
+    margin-bottom: 18px;
+    font-size: 15px;
+    color: #555;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border 0.25s ease;
+    margin-bottom: 10px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  button {
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #4f46e5;
+  }
+
+  .login-link {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .login-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 500px) {
+    .card {
+      padding: 30px 20px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    input, button {
+      font-size: 14px;
+    }
+  }
+</style>
+<div class="center-wrapper">
+  <div class="card">
+    <h2>📝 Create Your Smart Account</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form1.as_p }}
+      {{ form2.as_p }}
+      <button type="submit">Register</button>
+    </form>
+    <div class="login-link">
+      Already a member? <a href="{% url 'userlogin' %}">Login here</a>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const validators = [];
+
+  function addValidation(input, pattern, validMsg, invalidMsg, isRequired = true) {
+    const feedback = document.createElement("small");
+    feedback.style.display = "block";
+    input.parentNode.appendChild(feedback);
+
+    const validate = () => {
+      const value = input.value.trim();
+      if (isRequired && !value) {
+        feedback.textContent = "❌ Required field";
+        feedback.style.color = "red";
+        return false;
+      } else if (pattern && value && !pattern.test(value)) {
+        feedback.textContent = "❌ " + invalidMsg;
+        feedback.style.color = "red";
+        return false;
+      } else {
+        feedback.textContent = value ? "✅ " + validMsg : "";
+        feedback.style.color = "green";
+        return true;
+      }
+    };
+
+    input.addEventListener("input", validate);
+    validators.push(validate);
+  }
+
+  function validateFileInput(input) {
+    const feedback = document.createElement("small");
+    feedback.style.display = "block";
+    input.parentNode.appendChild(feedback);
+
+    const validate = () => {
+      const file = input.files[0];
+      if (!file) {
+        feedback.textContent = "❌ File is required";
+        feedback.style.color = "red";
+        return false;
+      }
+
+      const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        feedback.textContent = "❌ Invalid file type (PDF/JPG/PNG allowed)";
+        feedback.style.color = "red";
+        return false;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        feedback.textContent = "❌ File too large (max 5MB)";
+        feedback.style.color = "red";
+        return false;
+      }
+
+      feedback.textContent = "✅ File is valid";
+      feedback.style.color = "green";
+      return true;
+    };
+
+    input.addEventListener("change", validate);
+    validators.push(validate);
+  }
+
+  // Get inputs by name (set by Django form field names)
+  const nameInput = document.querySelector('input[name$="name"]');
+  const contactInput = document.querySelector('input[name$="contact"]');
+  const emailInput = document.querySelector('input[name="email"]');
+  const passwordInput = document.querySelector('input[name="password"]');
+  const experienceInput = document.querySelector('input[name$="experience"]');
+  const certInput = document.querySelector('input[name$="experience_certificate"]');
+
+  if (nameInput) {
+    addValidation(nameInput, /^[A-Za-z\s]{2,}$/, "Valid name", "Only letters and spaces");
+  }
+
+  if (contactInput) {
+    addValidation(contactInput, /^\d{10}$/, "Valid contact", "Must be a 10-digit number");
+  }
+
+  if (emailInput) {
+    addValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Valid email", "Enter a valid email");
+  }
+
+  if (passwordInput) {
+    addValidation(
+      passwordInput,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+      "Strong password",
+      "Min 8 chars with uppercase, lowercase, number & special character"
+    );
+  }
+
+  if (experienceInput) {
+    addValidation(experienceInput, /^\d+$/, "Valid experience", "Must be a number");
+  }
+
+  if (certInput) {
+    validateFileInput(certInput);
+  }
+
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function (e) {
+    let isValid = true;
+    validators.forEach(validate => {
+      if (!validate()) isValid = false;
+    });
+
+    if (!isValid) {
+      e.preventDefault();
+      alert("❌ Please fix validation errors before submitting.");
+    }
+  });
+});
+</script>
+
+{% endblock %}

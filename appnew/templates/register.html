@@ -1,0 +1,283 @@
+{% extends "indexheader.html" %}
+{% block content %}
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+  :root {
+    --primary: #6366f1;
+    --accent: #ec4899;
+    --bg-light: #f9f9fb;
+    --text-dark: #1f2937;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    padding: 35px 30px;
+    max-width: 450px;
+    width: 100%;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(15px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  h2 {
+    text-align: center;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  form {
+    display: flex;
+
+    flex-direction: column;
+  }
+    .center-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
+    padding: 20px 0;
+  }
+
+  form p {
+    margin-bottom: 18px;
+    font-size: 15px;
+    color: #555;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border 0.25s ease;
+    margin-bottom: 10px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  button {
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #4f46e5;
+  }
+
+  .login-link {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .login-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 500px) {
+    .card {
+      padding: 30px 20px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    input, button {
+      font-size: 14px;
+    }
+  }
+</style>
+<div class="center-wrapper">
+  <div class="card">
+    <h2>📝 Create Your Smart Account</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form1.as_p }}
+      {{ form2.as_p }}
+
+       <!-- Get Location Button -->
+  <button type="button" onclick="getLocation()">📍 Get Location</button>
+
+  <!-- Map Display -->
+  <div id="map" style="height: 300px; margin-top: 15px; border-radius: 10px;"></div>
+
+      <button type="submit">Register</button>
+    </form>
+    <div class="login-link">
+      Already a member? <a href="{% url 'userlogin' %}">Login here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  let map, marker;
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lng;
+
+        if (!map) {
+          map = L.map('map').setView([lat, lng], 16);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(map);
+
+          marker = L.marker([lat, lng]).addTo(map)
+                   .bindPopup("Workshop Location").openPopup();
+        } else {
+          map.setView([lat, lng], 16);
+          marker.setLatLng([lat, lng]);
+        }
+
+      }, () => {
+        alert("Geolocation failed. Please allow location access.");
+      });
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const validators = [];
+
+  function handleValidation(input, pattern, validMsg, invalidMsg) {
+    const feedback = document.createElement('small');
+    feedback.style.display = 'block';
+    input.parentNode.appendChild(feedback);
+
+    function validate() {
+      const value = input.value.trim();
+      if (!value) {
+        feedback.textContent = '❌ This field is required';
+        feedback.style.color = 'red';
+        return false;
+      } else if (!pattern.test(value)) {
+        feedback.textContent = '❌ ' + invalidMsg;
+        feedback.style.color = 'red';
+        return false;
+      } else {
+        feedback.textContent = '✅ ' + validMsg;
+        feedback.style.color = 'green';
+        return true;
+      }
+    }
+
+    input.addEventListener('input', validate);
+    validators.push(validate);
+  }
+
+  // Validate name
+  const nameInput = document.querySelector('input[name="workshopname"]');
+  if (nameInput) {
+    handleValidation(
+      nameInput,
+      /^[A-Za-z ]+$/,
+      'Valid name',
+      'Name must contain only letters and spaces'
+    );
+  }
+
+  // Validate contact number
+  const contactInput = document.querySelector('input[name="wcontactno"]');
+  if (contactInput) {
+    handleValidation(
+      contactInput,
+      /^\d{10}$/,
+      'Valid phone number',
+      'Enter a valid 10-digit phone number'
+    );
+  }
+
+  // Validate email
+  const emailInput = document.querySelector('input[name="email"]');
+  if (emailInput) {
+    handleValidation(
+      emailInput,
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      'Valid email',
+      'Enter a valid email address'
+    );
+  }
+
+  // Validate password
+  const passwordInput = document.querySelector('input[name="password"]');
+  if (passwordInput) {
+    handleValidation(
+      passwordInput,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+      'Strong password',
+      'Password must be at least 8 characters with uppercase, lowercase, number, and symbol'
+    );
+  }
+
+  // Prevent submission if invalid
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      let isValid = true;
+      validators.forEach(validate => {
+        if (!validate()) isValid = false;
+      });
+
+      // Also check lat/long presence
+      const lat = document.querySelector('input[name="latitude"]');
+      const lng = document.querySelector('input[name="longitude"]');
+      if (!lat.value || !lng.value) {
+        alert("📍 Please use the 'Get Location' button to select your location.");
+        isValid = false;
+      }
+
+      if (!isValid) {
+        e.preventDefault();
+        alert("❌ Please fill all required fields and fix validation errors.");
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}

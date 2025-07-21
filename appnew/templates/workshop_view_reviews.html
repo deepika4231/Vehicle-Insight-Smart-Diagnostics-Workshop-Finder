@@ -1,0 +1,238 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Workshop Reviews</title>
+  <style>
+    :root {
+      --primary: #007bff;
+      --accent: #ffc107;
+      --bg: #f7f9fb;
+      --card-bg: #fff;
+      --text: #333;
+      --muted: #888;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .average-rating {
+      text-align: center;
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    .review-item {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 16px 0;
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-user {
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .review-rating {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .review-date {
+      float: right;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .review-comment {
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 30px 0;
+    }
+
+    @media (max-width: 600px) {
+      .review-date {
+        float: none;
+        display: block;
+        margin-top: 4px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body> -->
+  {% extends "workshopheader.html" %}
+{% block content %}
+   <style>
+    :root {
+      --primary: #007bff;
+      --accent: #ffc107;
+      --bg: #f7f9fb;
+      --card-bg: #fff;
+      --text: #333;
+      --muted: #888;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .average-rating {
+      text-align: center;
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    .review-item {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 16px 0;
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-user {
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .review-rating {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .review-date {
+      float: right;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .review-comment {
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 30px 0;
+    }
+
+    @media (max-width: 600px) {
+      .review-date {
+        float: none;
+        display: block;
+        margin-top: 4px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  <div class="container">
+    <h2>All Reviews for {{ workshop.workshopname }}</h2>
+    <div class="average-rating">
+      {% if workshop.average_rating %}
+        Average: {{ workshop.average_rating }} ★
+      {% else %}
+        No ratings yet
+      {% endif %}
+    </div>
+
+    <div class="reviews">
+      {% if reviews %}
+        {% for review in reviews %}
+          <div class="review-item">
+            <div>
+              <span class="review-user">{{ review.user.name }}</span>
+              <span class="review-rating">({{ review.rating }}★)</span>
+              <span class="review-date">{{ review.created_at|date:"d M Y H:i" }}</span>
+            </div>
+            <div class="review-comment">
+              {{ review.comment }}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="no-data">No reviews yet.</div>
+      {% endif %}
+    </div>
+  </div>
+<!-- </body>
+</html> -->
+{% endblock %}

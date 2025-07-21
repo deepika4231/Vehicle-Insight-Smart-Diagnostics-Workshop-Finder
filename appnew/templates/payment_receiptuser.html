@@ -1,0 +1,218 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f6f9fc;
+    padding: 40px;
+    margin: 0;
+  }
+
+  .receipt-box {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    color: #333;
+  }
+
+  .receipt-box h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+  }
+
+  .receipt-box .header-section,
+  .receipt-box .footer-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+
+  .info-table td {
+    padding: 10px;
+    vertical-align: top;
+  }
+
+  .info-table td.label {
+    font-weight: bold;
+    color: #555;
+    width: 25%;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  .items-table th, .items-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .items-table th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+  }
+
+  .total {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-top: 10px;
+  }
+
+  .footer-section {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .btn-print-download {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .btn-print-download button {
+    background: #2e7d32;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+  }
+
+  .btn-print-download button:hover {
+    background: #256428;
+  }
+
+  .ok-button-container {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .ok-button-container a button {
+    padding: 12px 32px;
+    border-radius: 8px;
+    background: #2e7d32;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .ok-button-container a button:hover {
+    background: #256428;
+  }
+</style>
+
+<div class="receipt-box" id="receipt">
+  <div class="header-section">
+    <h2> Payment Receipt</h2>
+  </div>
+
+  <table class="info-table">
+    <tr>
+      <td class="label">Receipt No:</td>
+      <td class="nowrap">#{{ card_payment.id }}</td>
+      <td class="label">Date:</td>
+      <td class="nowrap">{{ card_payment.current_date|date:"d M Y, h:i A" }}</td>
+    </tr>
+    <tr>
+      <td class="label">Customer Name:</td>
+      <td class="nowrap">{{ order_item.order_user.name }}</td>
+      <td class="label">Card Holder:</td>
+      <td class="nowrap">{{ card_payment.name }}</td>
+    </tr>
+    <tr>
+      <td class="label">Debited Card Number:</td>
+      <td class="nowrap">**** **** **** {{ card_payment.cardno|slice:"-4:" }}</td>
+      <td class="label">Credited Card Info:</td>
+      <td class="nowrap">**** **** **** {{ admin_account.cardno|slice:"-4:" }}</td>
+    </tr>
+  </table>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Part Name</th>
+        <th>Part Number</th>
+        <th>Unit Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ order_item.part_id.part_name }}</td>
+        <td>{{ order_item.part_id.part_number }}</td>
+        <td>₹{{ order_item.part_id.part_price }}</td>
+        <td>{{ order_item.order_quantity }}</td>
+        <td>₹{{ card_payment.amount }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="total">
+    Total Paid: ₹{{ card_payment.amount }}
+  </div>
+
+  <div class="btn-print-download">
+    <button onclick="printReceipt()">Print</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+  </div>
+
+  <div class="ok-button-container">
+    <a href="{% url 'orderdetails' %}">
+      <button type="button">OK</button>
+    </a>
+  </div>
+
+  <div class="footer-section">
+    Thank you for your purchase! For assistance, contact support@Vehicleinsight.com
+  </div>
+</div>
+
+<!-- JS PDF + html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  function printReceipt() {
+    const printContents = document.getElementById('receipt').innerHTML;
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    location.reload();
+  }
+
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const receipt = document.getElementById("receipt");
+    const canvas = await html2canvas(receipt, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "pt", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("payment_receipt.pdf");
+  }
+</script>
+{% endblock %}

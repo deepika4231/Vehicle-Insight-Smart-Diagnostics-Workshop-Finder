@@ -1,0 +1,421 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expert Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #dfe9f3, #ffffff);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    h3 {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 2.5rem;
+      color: #007BFF;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .search-bar button {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .search-bar button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #0072ff, #004b99);
+    }
+
+    table {
+      width: 95%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    thead {
+      background-color: #007BFF;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #eef4fd;
+      transition: background-color 0.3s ease;
+    }
+
+    button.table-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button.table-btn:hover {
+      background-color: #218838;
+    }
+
+    button.table-btn a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .back-button {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0;
+    }
+
+    .back-button button {
+      background-color: #6c757d;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button button:hover {
+      background-color: #5a6268;
+    }
+
+    .back-button button a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #999;
+      padding: 30px 0;
+      font-style: italic;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      h3 {
+        font-size: 2rem;
+      }
+
+      table, thead, tbody, th, td, tr {
+        font-size: 0.9rem;
+      }
+
+      .search-bar {
+        flex-direction: column;
+      }
+
+      .search-bar input,
+      .search-bar button {
+        width: 100%;
+      }
+
+      .search-bar button {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body> -->
+
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #dfe9f3, #ffffff);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    h3 {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 2.5rem;
+      color: #007BFF;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .search-bar button {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .search-bar button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #0072ff, #004b99);
+    }
+
+    table {
+      width: 95%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    thead {
+      background-color: #007BFF;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #eef4fd;
+      transition: background-color 0.3s ease;
+    }
+
+    button.table-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button.table-btn:hover {
+      background-color: #218838;
+    }
+
+    button.table-btn a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .back-button {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0;
+    }
+
+    .back-button button {
+      background-color: #6c757d;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button button:hover {
+      background-color: #5a6268;
+    }
+
+    .back-button button a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #999;
+      padding: 30px 0;
+      font-style: italic;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      h3 {
+        font-size: 2rem;
+      }
+
+      table, thead, tbody, th, td, tr {
+        font-size: 0.9rem;
+      }
+
+      .search-bar {
+        flex-direction: column;
+      }
+
+      .search-bar input,
+      .search-bar button {
+        width: 100%;
+      }
+
+      .search-bar button {
+        margin-top: 10px;
+      }
+    }
+  </style>
+{% extends "userheader.html" %}
+{% block content %}
+  <h3>Expert Details</h3>
+
+  <div class="form-container">
+    <form method="post">
+      {% csrf_token %}
+      <div class="search-bar">
+        <input type="text" name="search" placeholder="Search experts..." required>
+        <button type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Expert Name</th>
+        <th>Contact</th>
+        <th>Experience</th>
+        <th>Action</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in  experts_list %}
+      <tr>
+        <td>{{ user.name }}</td>
+        <td>{{ user.contact }}</td>
+        <td>{{ user.experience }}</td>
+        <td>
+          <button class="table-btn"><a href="{% url 'viewexpertslot' user.id %}">View Slots</a></button>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="no-data">No expert found</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+ 
+
+<!-- </body>
+</html> -->
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "userheader.html" %}
+{% block content %}
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 720px;
+    margin: 50px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    padding: 35px 40px;
+    color: #2c3e50;
+  }
+  h2 {
+    text-align: center;
+    color: #2a71d0;
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+  }
+  thead tr th {
+    background: #2a71d0;
+    color: white;
+    font-weight: 600;
+    padding: 14px 0;
+    border-radius: 8px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+  tbody tr {
+    background: #f9fbfe;
+    box-shadow: 0 4px 8px rgb(42 113 208 / 0.1);
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgb(42 113 208 / 0.18);
+  }
+  tbody tr td {
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 1rem;
+    color: #34495e;
+  }
+  .book-btn {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 15px rgba(24, 90, 157, 0.3);
+  }
+  .book-btn:hover {
+    background: linear-gradient(135deg, #185a9d, #43cea2);
+    box-shadow: 0 10px 25px rgba(24, 90, 157, 0.5);
+  }
+  .booked-msg {
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .btn-disabled {
+    background: #bdc3c7;
+    color: #7f8c8d;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: not-allowed;
+    user-select: none;
+    display: inline-block;
+  }
+  .back-link {
+    display: block;
+    margin: 40px auto 0;
+    text-align: center;
+    font-weight: 600;
+    color: #2a71d0;
+    font-size: 1.1rem;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+  .back-link:hover {
+    color: #185a9d;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      margin: 30px 15px;
+      padding: 25px 20px;
+    }
+    h2 {
+      font-size: 1.8rem;
+    }
+    tbody tr td, thead tr th {
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+    .book-btn, .btn-disabled {
+      padding: 8px 18px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<div class="container">
+  <h2>Available Slots for {{ workshop.workshopname }}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for slot in slots %}
+      <tr>
+        <td>{{ slot.date }}</td>
+        <td>{{ slot.time|time:"H:i" }}</td>
+        <td>
+          {% if complaints == 0 %}
+            {% if slot.date >= today %}
+              <a href="{% url 'appointment' slot.id workshop.id %}" class="book-btn">Book Appointment</a>
+            {% else %}
+              <span class="btn-disabled">Book Appointment</span>
+            {% endif %}
+          {% else %}
+            <span class="booked-msg">Already booked. Complete current booking first.</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" style="font-style: italic; color: #7f8c8d;">No available slots.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{% url 'workshopdetailpage' %}" class="back-link">← Back to Workshops</a>
+</div>
+{% endblock %}

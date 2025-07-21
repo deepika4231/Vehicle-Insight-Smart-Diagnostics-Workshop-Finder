@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaint Details</title>
+  <style>
+    :root {
+      --primary-color: #5e8dff; /* Soft Light Blue */
+      --secondary-color: #98dfc7; /* Mint Green */
+      --bg-color: #f0f8ff; /* Alice Blue (light blue) */
+      --white: #fff;
+      --text-color: #2f4f4f; /* Dark Slate Gray */
+      --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      --hover-color: #4a7cff; /* Slightly Darker Blue */
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 20px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    h3 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: var(--primary-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    /* Animation for headings */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      margin: auto;
+      border-collapse: collapse;
+      background-color: var(--white);
+      box-shadow: var(--shadow);
+      border-radius: 10px;
+      transition: transform 0.3s ease-out;
+    }
+
+    table:hover {
+      transform: scale(1.02);
+    }
+
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      font-size: 1.1rem;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: var(--white);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: rgba(94, 141, 255, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: var(--primary-color);
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin: 30px auto 0;
+      padding: 12px 24px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-back:hover {
+      background-color: var(--hover-color);
+    }
+
+    .no-data {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    /* Mobile responsive design */
+    @media (max-width: 768px) {
+      h3 {
+        font-size: 2rem;
+      }
+
+      table {
+        font-size: 0.9rem;
+        min-width: unset;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+    }
+
+    /* Hover Animation on Links */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    a:hover {
+      animation: bounce 0.5s ease-in-out;
+    }
+
+    /* Card style for mobile view */
+    @media (max-width: 480px) {
+      .table-container {
+        padding: 10px;
+      }
+
+      table {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Complaint Details</h3>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Category</th>
+          <th>Company</th>
+          <th>Model</th>
+          <th>Issue</th>
+          <th>Progress</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if issues %}
+          {% for uissue in issues %}
+          <tr>
+            <td>{{ uissue.userid.name }}</td>
+            <td>{{ uissue.userid.contact }}</td>
+            <td>{{ uissue.vehiclecategory }}</td>
+            <td>{{ uissue.company }}</td>
+            <td>{{ uissue.modelname }}</td>
+            <td>{{ uissue.issue }}</td>
+            <td>{{ uissue.service }}</td>
+            <td>{{ uissue.status }}</td>
+            <td><a href="{% url 'addexpertprogress' uissue.id %}">Update</a></td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="9" class="no-data">No complaints found.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="expertpage" class="btn-back">⬅ Back</a>
+  </div>
+
+</body>
+</html>

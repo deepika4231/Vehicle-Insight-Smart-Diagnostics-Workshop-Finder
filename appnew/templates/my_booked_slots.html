@@ -1,0 +1,331 @@
+{% extends "userheader.html" %}
+{% block content %}
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>My Booked Slots</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 36px 28px 28px 28px;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+        }
+        .messages {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 14px 10px;
+            background: #f8f9fa;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+        th {
+            background: #007bff;
+            color: #fff;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.08rem;
+            letter-spacing: 0.5px;
+        }
+        tr {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 8px;
+        }
+        tr:nth-child(even) td {
+            background: #e9f2fb;
+        }
+        .btn-cancel {
+            color: #fff;
+            background: #dc3545;
+            padding: 7px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .btn-cancel:hover {
+            background: #a71d2a;
+        }
+        .btn-edit {
+            color: #fff;
+            background: #007bff;
+            padding: 7px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .btn-edit:hover {
+            background: #0056b3;
+        }
+        .btn-call {
+            color: #fff;
+            background: #28a745;
+            padding: 7px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .btn-call:hover {
+            background: #218838;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 28px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            border-radius: 5px;
+            padding: 8px 18px;
+            background: #f1f8ff;
+            transition: background 0.2s;
+        }
+        .back-link:hover {
+            background: #e2eefd;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 16px 4px; }
+            th, td { font-size: 0.97rem; padding: 10px 4px; }
+            .btn-cancel, .btn-edit, .btn-call, .back-link { font-size: 0.97rem; padding: 7px 10px; }
+        }
+    </style>
+</head>
+<body> -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 36px 28px 28px 28px;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+        }
+        .messages {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 14px 10px;
+            background: #f8f9fa;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+        th {
+            background: #007bff;
+            color: #fff;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.08rem;
+            letter-spacing: 0.5px;
+        }
+        tr {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 8px;
+        }
+        tr:nth-child(even) td {
+            background: #e9f2fb;
+        }
+        .btn-cancel {
+            color: #fff;
+            background: #dc3545;
+            padding: 7px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .btn-cancel:hover {
+            background: #a71d2a;
+        }
+        .btn-edit {
+            color: #fff;
+            background: #007bff;
+            padding: 7px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .btn-edit:hover {
+            background: #0056b3;
+        }
+        .btn-call {
+            color: #fff;
+            background: #28a745;
+            padding: 7px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .btn-call:hover {
+            background: #218838;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 28px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            border-radius: 5px;
+            padding: 8px 18px;
+            background: #f1f8ff;
+            transition: background 0.2s;
+        }
+        .back-link:hover {
+            background: #e2eefd;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 16px 4px; }
+            th, td { font-size: 0.97rem; padding: 10px 4px; }
+            .btn-cancel, .btn-edit, .btn-call, .back-link { font-size: 0.97rem; padding: 7px 10px; }
+        }
+    </style>
+    <div class="container">
+        <h2>My Booked Slots</h2>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <table>
+            <tr>
+                <th>Expert</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Booked At</th>
+                <th>Edit Slot</th>
+                <th>Action</th>
+                <th>Call</th>
+            </tr>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.slot.expert.name }}</td>
+                <td>{{ booking.slot.date }}</td>
+                <td>{{ booking.slot.start_time|time:"H:i" }}</td>
+                <td>{{ booking.slot.end_time|time:"H:i" }}</td>
+                <td>{{ booking.booked_at }}</td>
+                
+
+         {% if booking.slot.date > today or booking.slot.date == today and booking.slot.end_time < now %}
+
+            
+            <td>
+                <a class="btn-edit" href="{% url 'edit_expertslot' booking.id %}" onclick="return confirm('Edit this booking?');">Edit</a>
+            </td>
+            <td>
+                <a class="btn-cancel" href="{% url 'cancel_slot_booking' booking.id %}" onclick="return confirm('Cancel this booking?');">Cancel</a>
+            </td>
+            <td>
+                <span class="btn btn-call" style="background:#bdbdbd; color:#eee; cursor:not-allowed;">Join</span>
+                </td>
+
+                 {% elif booking.slot.date == today and booking.slot.start_time <= now_time and now_time <= booking.slot.end_time %}
+ <td>
+                <span class="btn btn-edit" style="background:#bdbdbd; color:#eee; cursor:not-allowed;">Edit</span>
+            </td>
+            <td>
+                <span class="btn btn-cancel" style="background:#bdbdbd; color:#eee; cursor:not-allowed;">Cancel</span>
+            </td>
+            <td>
+                {% if booking.url != "0" %}
+                <a class="btn-call" href="{{ booking.url }}">join</a>
+                {% else %}
+                <span class="btn-call" style="background:#bdbdbd; color:#029f6b; cursor:not-allowed;">join</span>
+                {% endif %}
+                
+            </td>
+        {% else %}
+            <td>
+                <span class="btn btn-edit" style="background:#bdbdbd; color:#eee; cursor:not-allowed;">Edit</span>
+            </td>
+            <td>
+                <span class="btn btn-cancel" style="background:#bdbdbd; color:#eee; cursor:not-allowed;">Cancel</span>
+            </td>
+            <td>
+                <span class="btn btn-call" style="background:#bdbdbd; color:#eee; cursor:not-allowed;">Join</span>
+            </td>
+        {% endif %}
+    {% endfor %}
+            </tr>
+        </table>
+       
+    </div>
+<!-- </body>
+</html> -->
+{% endblock %}

@@ -1,0 +1,219 @@
+{% extends "workshopheader.html" %}
+{% block content %}
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --text: #1f2937;
+      --light: #f9fafb;
+      --gray: #6b7280;
+      --white: #ffffff;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--light);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 480px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form p {
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+      color: var(--gray);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #f9fafb;
+      transition: border 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background: #fff;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      background: var(--primary);
+      color: var(--white);
+      font-size: 16px;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1d4ed8;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px 16px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  </style>
+ 
+  <div class="container">
+    <h1>Edit Your Details</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {{ form2.as_p }}
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const validators = [];
+
+  function handleValidation(input, pattern, validMsg, invalidMsg) {
+    const feedback = document.createElement('small');
+    feedback.style.display = 'block';
+    input.parentNode.appendChild(feedback);
+
+    function validate() {
+      const value = input.value.trim();
+      if (!value) {
+        feedback.textContent = '❌ This field is required';
+        feedback.style.color = 'red';
+        return false;
+      } else if (!pattern.test(value)) {
+        feedback.textContent = '❌ ' + invalidMsg;
+        feedback.style.color = 'red';
+        return false;
+      } else {
+        feedback.textContent = '✅ ' + validMsg;
+        feedback.style.color = 'green';
+        return true;
+      }
+    }
+
+    input.addEventListener('input', validate);
+    validators.push(validate);
+  }
+
+  // Validation rules
+  const nameInput = document.querySelector('input[name="workshopname"]');
+  if (nameInput) {
+    handleValidation(
+      nameInput,
+      /^[A-Za-z ]+$/,
+      'Valid name',
+      'Only letters and spaces allowed'
+    );
+  }
+
+  const contactInput = document.querySelector('input[name="wcontactno"]');
+  if (contactInput) {
+    handleValidation(
+      contactInput,
+      /^\d{10}$/,
+      'Valid contact',
+      'Must be 10 digits'
+    );
+  }
+
+  const brnInput = document.querySelector('input[name="BRN"]');
+  if (brnInput) {
+    handleValidation(
+      brnInput,
+      /^[A-Za-z0-9\-]+$/,
+      'Valid BRN',
+      'Alphanumeric only'
+    );
+  }
+
+  const districtInput = document.querySelector('input[name="district"]');
+  const cityInput = document.querySelector('input[name="city"]');
+  const addressInput = document.querySelector('input[name="adress"]');
+
+  [districtInput, cityInput, addressInput].forEach((input) => {
+    if (input) {
+      const feedback = document.createElement('small');
+      feedback.style.display = 'block';
+      input.parentNode.appendChild(feedback);
+
+      input.addEventListener('input', function () {
+        if (input.value.trim() === '') {
+          feedback.textContent = '❌ This field is required';
+          feedback.style.color = 'red';
+        } else {
+          feedback.textContent = '';
+        }
+      });
+
+      validators.push(() => input.value.trim() !== '');
+    }
+  });
+
+  // Final form check
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      let isValid = true;
+      validators.forEach(validateFn => {
+        if (!validateFn()) isValid = false;
+      });
+
+      if (!isValid) {
+        e.preventDefault();
+        alert("❌ Please fix the errors before submitting.");
+      }
+    });
+  }
+});
+</script>
+
+
+{% endblock %}
+
